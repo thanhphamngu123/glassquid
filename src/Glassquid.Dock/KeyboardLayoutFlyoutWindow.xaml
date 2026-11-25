@@ -1,0 +1,161 @@
+<controls:GlassWindow
+    x:Class="Glassquid.Dock.KeyboardLayoutFlyoutWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Glassquid.UI.Controls;assembly=Glassquid.UI"
+    Title="Bố cục bàn phím"
+    AutomationProperties.Name="Bố cục bàn phím"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="Manual"
+    Topmost="True"
+    SnapsToDevicePixels="True"
+    Deactivated="OnPopupDeactivated"
+    PreviewKeyDown="OnPopupPreviewKeyDown">
+  <controls:GlassWindow.Resources>
+    <Style x:Key="LayoutChoiceButton" TargetType="Button">
+      <Setter Property="Height" Value="56" />
+      <Setter Property="Margin" Value="0,2" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="HoverSurface" Background="Transparent" CornerRadius="8">
+              <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="HoverSurface" Property="Background" Value="#22FFFFFF" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="HoverSurface" Property="Background" Value="#38FFFFFF" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="FooterButton" TargetType="Button">
+      <Setter Property="Height" Value="42" />
+      <Setter Property="Padding" Value="12,0" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="FooterSurface" Background="Transparent" CornerRadius="8">
+              <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="FooterSurface" Property="Background" Value="#22FFFFFF" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="FooterSurface" Property="Background" Value="#38FFFFFF" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </controls:GlassWindow.Resources>
+
+  <Border Background="Transparent" BorderThickness="0" SnapsToDevicePixels="True">
+    <Grid x:Name="PopupVisualRoot" ClipToBounds="True" Opacity="0" RenderTransformOrigin="0.5,1">
+      <Grid.RenderTransform>
+        <TranslateTransform x:Name="PopupSlideTransform" Y="14" />
+      </Grid.RenderTransform>
+      <controls:LiquidGlassSurface x:Name="GlassSurface" />
+      <controls:PhoneBorder CornerRadius="{Binding PanelCornerRadius, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Padding="10,9"
+              Background="Transparent"
+              BorderBrush="{Binding PanelBorderBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+              BorderThickness="1.5">
+        <StackPanel Width="360">
+          <StackPanel Orientation="Horizontal" Margin="10,7,10,12" VerticalAlignment="Center">
+            <TextBlock Text="Bố cục bàn phím" FontSize="14" FontWeight="Medium"
+                       VerticalAlignment="Center"
+                       Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <StackPanel Orientation="Horizontal" Margin="12,0,0,0" VerticalAlignment="Center">
+              <Border Height="22" MinWidth="22" Background="#18FFFFFF" BorderBrush="#28FFFFFF"
+                      BorderThickness="1" CornerRadius="4" Padding="4,3" SnapsToDevicePixels="True">
+                <Viewbox Width="14" Height="14" Stretch="Uniform">
+                  <Path x:Name="GridShortcutIcon" Fill="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                </Viewbox>
+              </Border>
+              <TextBlock Text="+" FontSize="12" Margin="5,0" Opacity="0.72" VerticalAlignment="Center"
+                         Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              <Border Height="22" Background="#18FFFFFF" BorderBrush="#28FFFFFF"
+                      BorderThickness="1" CornerRadius="4" Padding="7,1" SnapsToDevicePixels="True">
+                <TextBlock Text="Spacebar" FontSize="12" VerticalAlignment="Center"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </Border>
+            </StackPanel>
+          </StackPanel>
+
+          <ItemsControl x:Name="LayoutChoicesList">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Style="{StaticResource LayoutChoiceButton}" Tag="{Binding}"
+                        Click="OnLayoutChoiceClick"
+                        AutomationProperties.Name="{Binding DisplayName}">
+                  <Border x:Name="ChoiceSurface" Background="Transparent" CornerRadius="8">
+                    <Grid>
+                      <Border x:Name="SelectionStripe" Width="3" Height="24" CornerRadius="2"
+                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                              Background="#39C5F6" Visibility="Collapsed" />
+                      <Grid Margin="12,0,10,0">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="40" />
+                          <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding LanguageCode}" FontSize="12"
+                                   VerticalAlignment="Center"
+                                   Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                          <TextBlock Text="{Binding DisplayName}" FontSize="14" FontWeight="Medium"
+                                     Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                          <TextBlock Text="{Binding LayoutName}" FontSize="12" Margin="0,1,0,0"
+                                     Opacity="0.72"
+                                     Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                        </StackPanel>
+                      </Grid>
+                    </Grid>
+                  </Border>
+                </Button>
+              <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                  <Setter TargetName="ChoiceSurface" Property="Background" Value="#2AFFFFFF" />
+                  <Setter TargetName="SelectionStripe" Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </DataTemplate.Triggers>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <TextBlock x:Name="EmptyLayoutsText" Text="Không tìm thấy bố cục bàn phím."
+                     Margin="12,12" FontSize="13" TextWrapping="Wrap" Visibility="Collapsed"
+                     Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+
+          <TextBlock x:Name="StatusText" Visibility="Collapsed" Margin="12,5,12,2"
+                     FontSize="11" TextWrapping="Wrap"
+                     Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+
+          <Border Height="1" Margin="0,7,0,3" Background="#20FFFFFF" />
+          <Button x:Name="MoreKeyboardSettingsButton" Style="{StaticResource FooterButton}"
+                  Click="OnMoreKeyboardSettingsClick">
+            <TextBlock Text="Cài đặt bàn phím khác" FontSize="13" Opacity="0.82"
+                       Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          </Button>
+        </StackPanel>
+      </controls:PhoneBorder>
+    </Grid>
+  </Border>
+</controls:GlassWindow>

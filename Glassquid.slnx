@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Glassquid.App/Glassquid.App.csproj" />
+    <Project Path="src/Glassquid.AppServices/Glassquid.AppServices.csproj" />
+    <Project Path="src/Glassquid.Core/Glassquid.Core.csproj" />
+    <Project Path="src/Glassquid.Dock/Glassquid.Dock.csproj" />
+    <Project Path="src/Glassquid.Launcher/Glassquid.Launcher.csproj" />
+    <Project Path="src/Glassquid.Platform/Glassquid.Platform.csproj" />
+    <Project Path="src/Glassquid.Settings/Glassquid.Settings.csproj" />
+    <Project Path="src/Glassquid.UI/Glassquid.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Glassquid.Core.Tests/Glassquid.Core.Tests.csproj" />
+    <Project Path="tests/Glassquid.AppServices.Tests/Glassquid.AppServices.Tests.csproj" />
+    <Project Path="tests/Glassquid.InstanceProbe/Glassquid.InstanceProbe.csproj" />
+    <Project Path="tests/Glassquid.Dock.Tests/Glassquid.Dock.Tests.csproj" />
+    <Project Path="tests/Glassquid.UiAcceptance/Glassquid.UiAcceptance.csproj" />
+    <Project Path="tests/Glassquid.LauncherAcceptance/Glassquid.LauncherAcceptance.csproj" />
+    <Project Path="tests/Glassquid.InteractionAcceptance/Glassquid.InteractionAcceptance.csproj" />
+    <Project Path="tests/Glassquid.DesktopAcceptance/Glassquid.DesktopAcceptance.csproj" />
+  </Folder>
+</Solution>

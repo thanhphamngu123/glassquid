@@ -1,0 +1,19 @@
+<Application
+    x:Class="Glassquid.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    ShutdownMode="OnExplicitShutdown">
+  <!--
+    Không dùng StartupUri: host chịu trách nhiệm tạo và giữ từng cửa sổ, ứng dụng chạy thường trú ở khay hệ thống,
+    vì vậy tiến trình vẫn tiếp tục chạy khi tất cả cửa sổ đều ẩn. Hành vi mặc định OnLastWindowClose
+    sẽ kết thúc toàn bộ tiến trình ngay khi Dock đóng lại.
+  -->
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Assets/GlassquidBrandMark.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Glassquid.UI;component/Theming/LiquidGlassTheme.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

@@ -1,0 +1,451 @@
+<controls:GlassWindow
+    x:Class="Glassquid.Settings.SettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Glassquid.UI.Controls;assembly=Glassquid.UI"
+    xmlns:settings="clr-namespace:Glassquid.Settings"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    Title="Cài đặt Glassquid"
+    AutomationProperties.Name="Cài đặt Glassquid"
+    ShowInTaskbar="True"
+    WindowStartupLocation="CenterScreen"
+    Loaded="OnSettingsWindowLoaded"
+    Width="760"
+    Height="560">
+
+  <controls:GlassWindow.Resources>
+    <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">12</sys:Double>
+    <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">12</sys:Double>
+    <Style x:Key="ScrollPageButton" TargetType="RepeatButton">
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="RepeatButton">
+            <Border Background="Transparent" />
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="SlimScrollThumb" TargetType="Thumb">
+      <Setter Property="MinHeight" Value="24" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Thumb">
+            <Grid Background="Transparent">
+              <Border x:Name="Grip" Width="6" HorizontalAlignment="Center"
+                      CornerRadius="3" Background="{TemplateBinding Background}" Opacity="0.5" />
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Grip" Property="Opacity" Value="0.75" />
+              </Trigger>
+              <Trigger Property="IsDragging" Value="True">
+                <Setter TargetName="Grip" Property="Opacity" Value="1" />
+              </Trigger>
+              <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ScrollBar}}" Value="Horizontal">
+                <Setter TargetName="Grip" Property="Width" Value="Auto" />
+                <Setter TargetName="Grip" Property="Height" Value="6" />
+                <Setter TargetName="Grip" Property="HorizontalAlignment" Value="Stretch" />
+                <Setter TargetName="Grip" Property="VerticalAlignment" Value="Center" />
+              </DataTrigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=ScrollBar}}" Value="Horizontal">
+          <Setter Property="MinHeight" Value="0" />
+          <Setter Property="MinWidth" Value="24" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+    <Style TargetType="ScrollBar">
+      <Setter Property="Width" Value="12" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{Binding AccentBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+      <Setter Property="SnapsToDevicePixels" Value="True" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ScrollBar">
+            <Grid Background="Transparent">
+              <Track x:Name="PART_Track" Orientation="{TemplateBinding Orientation}" IsDirectionReversed="True"
+                     Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}"
+                     ViewportSize="{TemplateBinding ViewportSize}"
+                     Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                <Track.DecreaseRepeatButton>
+                  <RepeatButton x:Name="PageBefore" Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource ScrollPageButton}" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                  <Thumb Style="{StaticResource SlimScrollThumb}" Background="{TemplateBinding Foreground}" />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                  <RepeatButton x:Name="PageAfter" Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource ScrollPageButton}" />
+                </Track.IncreaseRepeatButton>
+              </Track>
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="Orientation" Value="Horizontal">
+                <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False" />
+                <Setter TargetName="PageBefore" Property="Command" Value="{x:Static ScrollBar.PageLeftCommand}" />
+                <Setter TargetName="PageAfter" Property="Command" Value="{x:Static ScrollBar.PageRightCommand}" />
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.3" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <Style.Triggers>
+        <Trigger Property="Orientation" Value="Horizontal">
+          <Setter Property="Width" Value="Auto" />
+          <Setter Property="Height" Value="12" />
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+  </controls:GlassWindow.Resources>
+
+  <controls:PhoneBorder
+      Background="{Binding PanelBackgroundBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+      BorderBrush="{Binding PanelBorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+      BorderThickness="1.5"
+      CornerRadius="{Binding PanelCornerRadius, RelativeSource={RelativeSource AncestorType=Window}}"
+      SnapsToDevicePixels="True">
+
+    <Grid>
+    <Grid x:Name="SettingsContentLayer" Margin="28">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <Border x:Name="SettingsDragArea" Grid.Row="0"
+          Margin="-28,-28,-28,-20" Padding="28,28,28,20"
+          Background="Transparent" MouseLeftButtonDown="OnDragArea">
+        <TextBlock
+          FontSize="20"
+          FontWeight="SemiBold"
+          Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+          Text="Cài đặt Glassquid" />
+      </Border>
+
+      <Grid Grid.Row="1" Margin="0,20,0,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="170" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" AutomationProperties.Name="Trang cài đặt">
+          <TextBlock
+              Margin="0,0,0,8"
+              FontSize="12"
+              Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+              Text="Danh mục cài đặt" />
+          <ListBox x:Name="SettingsPageList" SelectedIndex="0" SelectionChanged="OnSettingsPageSelected"
+                   ItemsSource="{Binding PlannedPages, RelativeSource={RelativeSource AncestorType=Window}}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock
+                    Margin="0,3"
+                    FontSize="13"
+                    Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Text="{Binding}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+
+        <controls:PhoneBorder
+            Grid.Column="1"
+            Margin="20,0,0,0"
+            Padding="18"
+            CornerRadius="22"
+            BorderThickness="1"
+            BorderBrush="{Binding PanelBorderBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+            Background="Transparent">
+          <ScrollViewer x:Name="SettingsScroll" VerticalScrollBarVisibility="Auto" ScrollChanged="OnSettingsScrollChanged">
+            <StackPanel>
+              <TextBlock x:Name="AppearanceSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Giao diện"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <TextBlock Margin="0,12,0,4" Text="Chất liệu kính" />
+              <ComboBox x:Name="AppearanceMaterialCombo" AutomationProperties.Name="Chất liệu kính"
+                        SelectionChanged="OnAppearanceControlChanged">
+                <ComboBoxItem Content="Kính lỏng" />
+                <ComboBoxItem Content="kính mờ" />
+              </ComboBox>
+              <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Kính lỏng tạo hiệu ứng khúc xạ và ánh sáng viền; kính mờ làm dịu nền mà không tạo khúc xạ. Thay đổi này áp dụng cho cả Dock và Launchpad." />
+              <TextBlock Margin="0,12,0,4" Text="Độ trong suốt của Dock" />
+              <DockPanel>
+                <TextBlock x:Name="DockTransparencyValue" DockPanel.Dock="Right" Width="48" TextAlignment="Right" />
+                <Slider x:Name="DockTransparencySlider" Minimum="0" Maximum="1" Value="0.9"
+                        SmallChange="0.01" LargeChange="0.1" IsMoveToPointEnabled="True"
+                        AutomationProperties.Name="Độ trong suốt của Dock" ValueChanged="OnAppearanceSliderChanged" />
+              </DockPanel>
+              <DockPanel Margin="0,4,0,0">
+                <TextBlock DockPanel.Dock="Left" Text="Không trong suốt" />
+                <TextBlock Text="Trong suốt" TextAlignment="Right" />
+              </DockPanel>
+              <TextBlock Margin="0,12,0,4" Text="Độ trong suốt của Launchpad" />
+              <DockPanel>
+                <TextBlock x:Name="LauncherTransparencyValue" DockPanel.Dock="Right" Width="48" TextAlignment="Right" />
+                <Slider x:Name="LauncherTransparencySlider" Minimum="0" Maximum="1" Value="0.2"
+                        SmallChange="0.01" LargeChange="0.1" IsMoveToPointEnabled="True"
+                        AutomationProperties.Name="Độ trong suốt của Launchpad" ValueChanged="OnAppearanceSliderChanged" />
+              </DockPanel>
+              <DockPanel Margin="0,4,0,0">
+                <TextBlock DockPanel.Dock="Left" Text="Không trong suốt" />
+                <TextBlock Text="Trong suốt" TextAlignment="Right" />
+              </DockPanel>
+              <TextBlock Margin="0,6,0,0" Text="Điều chỉnh riêng độ trong suốt của Dock và Launchpad. Mặc định: Dock 90%, Launchpad 20%." TextWrapping="Wrap" />
+              <TextBlock Margin="0,12,0,4" Text="Kiểu biểu tượng Launchpad" />
+              <ComboBox x:Name="LaunchpadIconStyleCombo" AutomationProperties.Name="Kiểu biểu tượng Launchpad"
+                        SelectionChanged="OnAppearanceControlChanged">
+                <ComboBoxItem Content="Đặc" />
+                <ComboBoxItem Content="Viền" />
+              </ComboBox>
+              <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Chọn kiểu biểu tượng cho lưới 3×3 của Launchpad trên Dock. Thay đổi được lưu và áp dụng ngay." />
+              <TextBlock Margin="0,12,0,4" Text="Độ sáng của biểu tượng cố định trên Dock" />
+              <DockPanel>
+                <TextBlock x:Name="DockBuiltinIconBrightnessValue" DockPanel.Dock="Right" Width="48" TextAlignment="Right" />
+                <Slider x:Name="DockBuiltinIconBrightnessSlider" Minimum="0" Maximum="1" Value="1"
+                        SmallChange="0.01" LargeChange="0.1" IsMoveToPointEnabled="True"
+                        AutomationProperties.Name="Độ sáng của biểu tượng cố định trên Dock" ValueChanged="OnAppearanceSliderChanged" />
+              </DockPanel>
+              <DockPanel Margin="0,4,0,0">
+                <TextBlock DockPanel.Dock="Left" Text="Đen" /><TextBlock Text="Trắng" TextAlignment="Right" />
+              </DockPanel>
+              <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Điều chỉnh màu của ba biểu tượng cố định: Launchpad, Máy tính này và nút bật/tắt biểu tượng màn hình." />
+              <TextBlock Margin="0,12,0,4" Text="Độ sáng chữ trong Launchpad" />
+              <DockPanel>
+                <TextBlock x:Name="LauncherTextBrightnessValue" DockPanel.Dock="Right" Width="48" TextAlignment="Right" />
+                <Slider x:Name="LauncherTextBrightnessSlider" Minimum="0" Maximum="1" Value="1"
+                        SmallChange="0.01" LargeChange="0.1" IsMoveToPointEnabled="True"
+                        AutomationProperties.Name="Độ sáng chữ trong Launchpad" ValueChanged="OnAppearanceSliderChanged" />
+              </DockPanel>
+              <DockPanel Margin="0,4,0,0">
+                <TextBlock DockPanel.Dock="Left" Text="Đen" /><TextBlock Text="Trắng" TextAlignment="Right" />
+              </DockPanel>
+              <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Điều chỉnh độ sáng của tên ứng dụng, tên nhóm và chữ trong Launchpad. Thay đổi được lưu và áp dụng ngay." />
+              <CheckBox x:Name="ReduceMotionCheck" Margin="0,10,0,0" Content="Giảm hoạt ảnh"
+                        AutomationProperties.Name="Giảm hoạt ảnh" Checked="OnAppearanceControlChanged" Unchecked="OnAppearanceControlChanged" />
+              <TextBlock x:Name="AppearanceStatus" Margin="0,8,0,12" TextWrapping="Wrap" AutomationProperties.Name="Trạng thái cài đặt giao diện" />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="DockSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Cài đặt Dock"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <TextBlock Margin="0,10,0,4" TextWrapping="Wrap"
+                         Text="Kích thước tổng thể điều chỉnh đồng thời biểu tượng, khoảng cách và chiều cao Dock. Có thể chỉnh riêng chiều dài khung Dock; hiệu ứng phóng to khi di chuột không đổi." />
+              <TextBlock Margin="0,12,0,4" Text="Chế độ hiển thị" />
+              <ComboBox x:Name="DockDisplayModeCombo" AutomationProperties.Name="Chế độ hiển thị Dock"
+                        SelectionChanged="OnDockControlChanged">
+                <ComboBoxItem Content="Luôn hiển thị" />
+                <ComboBoxItem Content="Tự động ẩn" />
+              </ComboBox>
+              <TextBlock Margin="0,4,0,8" TextWrapping="Wrap"
+                         Text="Khi bật tự động ẩn, Dock xuất hiện khi đưa chuột đến Vị trí của Dock và ẩn lại sau khoảng 300 mili giây. Dock vẫn hiện khi mở menu, kéo biểu tượng hoặc mở Launchpad." />
+              <TextBlock Margin="0,12,0,4" Text="Biểu tượng cố định bên trái" />
+              <CheckBox x:Name="ShowLauncherEntryCheckBox" Content="Hiển thị Launchpad" Margin="0,4"
+                        AutomationProperties.Name="Hiển thị Launchpad trên Dock" Checked="OnDockControlChanged" Unchecked="OnDockControlChanged" />
+              <CheckBox x:Name="ShowThisPcEntryCheckBox" Content="Hiển thị Máy tính này" Margin="0,4"
+                        AutomationProperties.Name="Hiển thị Máy tính này trên Dock" Checked="OnDockControlChanged" Unchecked="OnDockControlChanged" />
+              <CheckBox x:Name="ShowDesktopIconsEntryCheckBox" Content="Hiển thị nút bật/tắt biểu tượng màn hình" Margin="0,4"
+                        AutomationProperties.Name="Hiển thị nút bật/tắt biểu tượng màn hình trên Dock" Checked="OnDockControlChanged" Unchecked="OnDockControlChanged" />
+              <TextBlock Margin="0,4,0,10" TextWrapping="Wrap" Text="Launchpad, Máy tính này và nút bật/tắt biểu tượng màn hình được ghim bên trái Dock theo thứ tự này. Nút cuối dùng để hiện hoặc ẩn biểu tượng trên màn hình." />
+              <TextBlock Margin="0,12,0,4" Text="Kích thước tổng thể" />
+              <Slider x:Name="DockScaleSlider" Minimum="0.6666666666666666" Maximum="1.5"
+                      SmallChange="0.05" LargeChange="0.1" IsMoveToPointEnabled="True"
+                      AutomationProperties.Name="Kích thước Dock" ValueChanged="OnDockControlChanged" />
+              <TextBlock x:Name="DockScaleReadout" Margin="0,2,0,6" FontSize="11" AutomationProperties.Name="Kích thước Dock hiện tại" />
+              <TextBlock Margin="0,12,0,4" Text="Chiều dài khung Dock (DIP)" />
+              <Slider x:Name="DockFrameLengthSlider" Minimum="180" Maximum="180" TickFrequency="8"
+                      AutomationProperties.Name="Chiều dài khung Dock (DIP)"
+                      ValueChanged="OnDockControlChanged" />
+              <TextBlock x:Name="DockFrameLengthReadout" Margin="0,2,0,6" FontSize="11"
+                         AutomationProperties.Name="Chiều dài khung Dock hiện tại" />
+              <Button Content="Tự động điều chỉnh chiều dài khung Dock theo nội dung" HorizontalAlignment="Left" Margin="0,2,0,4"
+                      AutomationProperties.Name="Tự động điều chỉnh chiều dài khung Dock" Click="OnDockAutoLengthClick" />
+              <TextBlock Margin="0,12,0,4" Text="Vị trí"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <ComboBox x:Name="DockPlacementCombo" AutomationProperties.Name="Vị trí Dock"
+                        SelectionChanged="OnDockControlChanged">
+                <ComboBoxItem Content="Giữa cạnh dưới" />
+                <ComboBoxItem Content="Góc dưới bên trái" />
+                <ComboBoxItem Content="Góc dưới bên phải" />
+                <ComboBoxItem Content="Giữa cạnh trên" />
+              </ComboBox>
+              <TextBlock Margin="0,12,0,4" Text="Vị trí thanh Dock phụ (Khay hệ thống)"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <ComboBox x:Name="SystemTrayPlacementCombo" AutomationProperties.Name="Vị trí thanh Dock khay hệ thống"
+                        SelectionChanged="OnDockControlChanged">
+                <ComboBoxItem Content="Bên phải (Mặc định)" />
+                <ComboBoxItem Content="Bên trái" />
+              </ComboBox>
+              <TextBlock Margin="0,10,0,4" Text="Độ lệch ngang"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <Slider x:Name="DockOffsetXSlider" AutomationProperties.Name="Độ lệch ngang của Dock"
+                      Minimum="-200" Maximum="200" TickFrequency="1" IsSnapToTickEnabled="True"
+                      ValueChanged="OnDockControlChanged" />
+              <TextBlock Margin="0,10,0,4" Text="Độ lệch dọc"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <Slider x:Name="DockOffsetYSlider" AutomationProperties.Name="Độ lệch dọc của Dock"
+                      Minimum="-200" Maximum="200" TickFrequency="1" IsSnapToTickEnabled="True"
+                      ValueChanged="OnDockControlChanged" />
+              <TextBlock x:Name="DockSettingsStatus" Margin="0,10,0,16" TextWrapping="Wrap"
+                         Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="LauncherSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Cài đặt Launchpad"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <TextBlock Margin="0,12,0,4" Text="Số hàng (2–10)" />
+              <Slider x:Name="LauncherRowsSlider" Minimum="2" Maximum="10" TickFrequency="1"
+                      IsSnapToTickEnabled="True" AutomationProperties.Name="Số hàng Launchpad"
+                      ValueChanged="OnLauncherControlChanged" />
+              <TextBlock Margin="0,8,0,4" Text="Số cột (2–12)" />
+              <Slider x:Name="LauncherColumnsSlider" Minimum="2" Maximum="12" TickFrequency="1"
+                      IsSnapToTickEnabled="True" AutomationProperties.Name="Số cột Launchpad"
+                      ValueChanged="OnLauncherControlChanged" />
+              <CheckBox x:Name="LauncherFocusSearchCheck" Margin="0,8,0,0" Content="Tập trung tìm kiếm khi mở"
+                        AutomationProperties.Name="Tập trung tìm kiếm khi mở"
+                        Checked="OnLauncherControlChanged" Unchecked="OnLauncherControlChanged" />
+              <CheckBox x:Name="LauncherRememberPageCheck" Margin="0,8,0,0" Content="Ghi nhớ trang hiện tại"
+                        AutomationProperties.Name="Ghi nhớ trang Launchpad đang mở"
+                        Checked="OnLauncherControlChanged" Unchecked="OnLauncherControlChanged" />
+              <TextBlock x:Name="LauncherSettingsStatus" Margin="0,10,0,16" TextWrapping="Wrap"
+                         Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="ShortcutsSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Thao tác nhanh"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <TextBlock Margin="0,6,0,10" TextWrapping="Wrap" Text="Nhấn vào phím tắt hiện tại để ghi tổ hợp phím, phím dấu câu, nút cạnh chuột hoặc hướng cuộn. Thiết lập sẽ tự lưu sau khi ghi. Nhấn Esc để hủy, Backspace/Delete để xóa phím tắt." />
+              <UniformGrid Columns="2">
+                <TextBlock Margin="0,7" Text="Mở/đóng Launchpad" /><settings:ShortcutRecorder x:Name="ToggleLauncherHotkeyBox" AutomationProperties.Name="Phím tắt mở/đóng Launchpad"  RecordingCompleted="OnShortcutRecordingCompleted" />
+                <TextBlock Margin="0,7" Text="Trang tiếp theo" /><settings:ShortcutRecorder x:Name="NextPageHotkeyBox" AutomationProperties.Name="Phím tắt trang tiếp theo"  RecordingCompleted="OnShortcutRecordingCompleted" />
+                <TextBlock Margin="0,7" Text="Trang trước" /><settings:ShortcutRecorder x:Name="PreviousPageHotkeyBox" AutomationProperties.Name="Phím tắt trang trước"  RecordingCompleted="OnShortcutRecordingCompleted" />
+                <TextBlock Margin="0,7" Text="Chuyển đổi biểu tượng trên màn hình" /><settings:ShortcutRecorder x:Name="ToggleDesktopIconsHotkeyBox" AutomationProperties.Name="Phím tắt bật/tắt biểu tượng màn hình"  RecordingCompleted="OnShortcutRecordingCompleted" />
+                <TextBlock Margin="0,7" Text="Bật/tắt chế độ gọi Dock khi bị che" /><settings:ShortcutRecorder x:Name="ToggleDockRevealLockHotkeyBox" AutomationProperties.Name="Phím tắt bật/tắt chế độ gọi Dock khi bị che"  RecordingCompleted="OnShortcutRecordingCompleted" />
+              </UniformGrid>
+              <TextBlock x:Name="InteractionSettingsStatus" Margin="0,8,0,14" TextWrapping="Wrap"
+                         AutomationProperties.Name="Trạng thái cài đặt thao tác nhanh" />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="PerformanceSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Hiệu suất"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <CheckBox x:Name="AutoSuspendWhenFullscreenCheck" Margin="0,10,0,8" Content="Tự động tạm dừng khi có ứng dụng toàn màn hình"
+                        AutomationProperties.Name="Tự động tạm dừng khi có ứng dụng toàn màn hình" IsEnabled="False"
+                        Checked="OnPerformanceControlChanged" Unchecked="OnPerformanceControlChanged" />
+              <TextBlock TextWrapping="Wrap" Text="Thu gọn Dock và tạm dừng xử lý nền khi trò chơi hoặc video chạy toàn màn hình. Bạn vẫn có thể mở Launchpad bằng phím tắt hoặc từ khay hệ thống. Với trò chơi chạy ở chế độ cửa sổ, có thể bật chế độ tạm dừng khi chơi game từ khay hệ thống." />
+              <TextBlock x:Name="PerformanceSettingsStatus" Margin="0,8,0,14" TextWrapping="Wrap"
+                         AutomationProperties.Name="Trạng thái cài đặt hiệu suất" />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="DesktopSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Màn hình nền"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <CheckBox x:Name="HideWindowsTaskbarCheck" Margin="0,12,0,6"
+                        Content="Ẩn taskbar Windows khi Glassquid đang chạy"
+                        AutomationProperties.Name="Ẩn taskbar Windows khi Glassquid đang chạy"
+                        Checked="OnWindowsTaskbarVisibilityChanged" Unchecked="OnWindowsTaskbarVisibilityChanged" />
+              <TextBlock Margin="0,0,0,4" TextWrapping="Wrap"
+                         Text="Dùng Dock và thanh trạng thái Glassquid làm thanh chính. Khi tắt tùy chọn hoặc thoát Glassquid bình thường, taskbar Windows được hiện lại và trạng thái ban đầu được khôi phục." />
+              <TextBlock x:Name="TaskbarVisibilityStatus" Margin="0,0,0,12" TextWrapping="Wrap"
+                         AutomationProperties.Name="Trạng thái taskbar Windows" />
+              <TextBlock Margin="0,8,0,10" TextWrapping="Wrap" Text="Windows quản lý trạng thái hiển thị biểu tượng trên màn hình. Dùng nút bên dưới để bật hoặc tắt; nút sẽ bị vô hiệu hóa nếu tính năng không được hỗ trợ." />
+              <StackPanel Orientation="Horizontal">
+                <Button x:Name="DesktopIconsToggleButton" Padding="10,7" Content="Bật/tắt biểu tượng màn hình"
+                        AutomationProperties.Name="Bật/tắt biểu tượng màn hình" Click="OnDesktopIconsToggleClick" />
+              </StackPanel>
+              <TextBlock x:Name="DesktopSettingsStatus" Margin="0,8,0,14" TextWrapping="Wrap" AutomationProperties.Name="Trạng thái biểu tượng màn hình" />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="BackupSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Sao lưu và khôi phục"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <TextBlock x:Name="BackupInfoText" Margin="0,10,0,14" TextWrapping="Wrap" AutomationProperties.Name="Hướng dẫn sao lưu và khôi phục"
+                         Text="Bản sao lưu Glassquid gồm cài đặt, thư viện ứng dụng, bố cục Dock và Launchpad cùng các biểu tượng tùy chỉnh. Trước khi khôi phục, ứng dụng sẽ lưu một bản sao dữ liệu hiện tại. Chọn thư mục để tạo bản sao lưu hoặc chọn thư mục chứa bản sao lưu cần khôi phục." />
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                <Button x:Name="CreateBackupButton" Padding="10,7" Content="Tạo bản sao lưu"
+                        AutomationProperties.Name="Tạo bản sao lưu Glassquid" Click="OnCreateBackupClick" />
+                <Button x:Name="RestoreBackupButton" Margin="8,0,0,0" Padding="10,7" Content="Khôi phục từ bản sao lưu"
+                        AutomationProperties.Name="Khôi phục từ bản sao lưu Glassquid" Click="OnRestoreBackupClick" />
+              </StackPanel>
+              <TextBlock Margin="0,0,0,8" TextWrapping="Wrap"
+                         Text="Xóa dữ liệu người dùng sẽ không gỡ cài đặt ứng dụng hoặc thay đổi mục khởi động cùng Windows. Nên lưu bản sao lưu bên ngoài thư mục dữ liệu Glassquid trước. Thao tác này xóa cài đặt, thư viện ứng dụng, bố cục, biểu tượng tùy chỉnh, bản sao lưu nội bộ và nhật ký trong thư mục. Tệp gốc đã nhập và các bản sao lưu nằm ngoài thư mục sẽ được giữ lại." />
+              <Button x:Name="DeleteUserDataButton" Width="190" HorizontalAlignment="Left" Padding="10,7"
+                      Content="Xóa tất cả dữ liệu Glassquid" AutomationProperties.Name="Xóa tất cả dữ liệu người dùng Glassquid"
+                      Click="OnDeleteUserDataClick" />
+              <TextBlock x:Name="BackupStatus" Margin="0,0,0,14" TextWrapping="Wrap"
+                         AutomationProperties.Name="Trạng thái sao lưu và khôi phục" />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="TransferQrSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Mã QR nhận chuyển khoản"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <Border Width="244" Height="244" Margin="0,12,0,0" Padding="10" CornerRadius="14"
+                      HorizontalAlignment="Left" Background="White" BorderBrush="#FFD8DCE3" BorderThickness="1">
+                <Grid>
+                  <Image x:Name="TransferQrImage" Stretch="Uniform"
+                         AutomationProperties.Name="Mã VietQR chuyển khoản tới tài khoản TPBank" />
+                  <TextBlock x:Name="TransferQrUnavailable" Foreground="#FF555B66" FontSize="14"
+                             Text="Không tải được ảnh mã QR." TextAlignment="Center" TextWrapping="Wrap"
+                             VerticalAlignment="Center" Visibility="Collapsed" />
+                </Grid>
+              </Border>
+              <TextBlock Margin="0,10,0,0" FontSize="14" FontWeight="SemiBold"
+                         Text="TPBank  ·  Số tài khoản: 50985820843" />
+              <TextBlock Margin="0,6,0,14" TextWrapping="Wrap"
+                         Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                         Text="Mở ứng dụng ngân hàng và quét mã để chuyển khoản. Mã không đặt sẵn số tiền; hãy kiểm tra ngân hàng và số tài khoản trên màn hình xác nhận trước khi chuyển." />
+              <Separator Margin="0,4,0,14" />
+              <TextBlock x:Name="AboutSectionHeading" FontSize="16" FontWeight="SemiBold" Text="Giới thiệu và thông tin hoạt động"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <TextBlock x:Name="ProductVersionText" Margin="0,10,0,6" FontSize="14" FontWeight="SemiBold"
+                         AutomationProperties.Name="Phiên bản hiện tại của Glassquid" />
+              <Button x:Name="CheckUpdateButton" Width="132" HorizontalAlignment="Left" Padding="10,7"
+                      Content="Kiểm tra cập nhật" AutomationProperties.Name="Kiểm tra cập nhật của Glassquid" Click="OnCheckUpdateClick" />
+              <TextBlock x:Name="UpdateStatusText" Margin="0,6,0,12" TextWrapping="Wrap"
+                         AutomationProperties.Name="Trạng thái cập nhật Glassquid" Text="Glassquid tự động kiểm tra phiên bản mới khi khởi động; bạn cũng có thể kiểm tra thủ công." />
+              <CheckBox
+                  x:Name="AutostartCheck"
+                  Margin="0,12,0,0"
+                  Content="Khởi chạy Glassquid khi đăng nhập (chỉ người dùng hiện tại)"
+                  AutomationProperties.Name="Khởi chạy Glassquid khi đăng nhập, chỉ người dùng hiện tại"
+                  IsEnabled="False"
+                  Click="OnAutostartClick" />
+              <TextBlock
+                  x:Name="AutostartStatus"
+                  Margin="0,4,0,0"
+                  TextWrapping="Wrap"
+                  AutomationProperties.Name="Trạng thái khởi chạy cùng Windows" />
+              <TextBlock
+                  x:Name="AutostartExecutableText"
+                  Margin="0,2,0,12"
+                  TextWrapping="Wrap"
+                  AutomationProperties.Name="Đường dẫn thực thi Glassquid hiện tại" />
+              <Button x:Name="UninstallButton" Width="132" HorizontalAlignment="Left" Padding="10,7"
+                      Content="Gỡ bỏ Glassquid" AutomationProperties.Name="Gỡ cài đặt chương trình Glassquid"
+                      IsEnabled="False" Click="OnUninstallClick" />
+              <TextBlock x:Name="InstallationStatus" Margin="0,6,0,12" TextWrapping="Wrap"
+                         AutomationProperties.Name="Trạng thái cài đặt và gỡ cài đặt Glassquid" />
+              <TextBlock
+                  FontSize="13"
+                  FontWeight="SemiBold"
+                  Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}"
+                  Text="Thông tin hệ thống và vị trí dữ liệu" />
+              <TextBlock
+                  x:Name="DiagnosticsText"
+                  Margin="0,10,0,0"
+                  FontSize="12"
+                  TextWrapping="Wrap"
+                  LineHeight="20"
+                  Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=Window}}" />
+            </StackPanel>
+          </ScrollViewer>
+        </controls:PhoneBorder>
+      </Grid>
+
+      <StackPanel Grid.Row="2" Margin="0,20,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button x:Name="ResetPageButton" Width="144" Height="32" Margin="0,0,8,0"
+            Content="Khôi phục mặc định cho trang này" AutomationProperties.Name="Khôi phục mặc định cho trang này" Click="OnResetPageClick" />
+        <Button
+            Width="96"
+            Height="32"
+            Content="Đóng"
+            AutomationProperties.Name="Đóng cửa sổ cài đặt"
+            Click="OnCloseClick" />
+      </StackPanel>
+    </Grid>
+    </Grid>
+  </controls:PhoneBorder>
+
+</controls:GlassWindow>

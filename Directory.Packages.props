@@ -1,0 +1,25 @@
+<Project>
+
+  <!--
+    Central Package Management.
+
+    Glassquid-owned projects keep direct package references out of src/**. The vendored
+    ManagedShell WindowsTray dependency retains its upstream package references, pinned
+    below, alongside the test-only packages.
+  -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="System.Data.OleDb" Version="8.0.1" />
+    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
+
+    <!-- Test-only. Versions resolved from the official NuGet feed index. -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
+  </ItemGroup>
+
+</Project>

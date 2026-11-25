@@ -1,0 +1,71 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "GlassDesk.UI/1.4.0": {
+        "dependencies": {
+          "GlassDesk.Core": "1.4.0",
+          "GlassDesk.Platform": "1.4.0",
+          "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.26100.57"
+        },
+        "runtime": {
+          "GlassDesk.UI.dll": {}
+        }
+      },
+      "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.26100.57": {
+        "runtime": {
+          "Microsoft.Windows.SDK.NET.dll": {
+            "assemblyVersion": "10.0.26100.38",
+            "fileVersion": "10.0.26100.55"
+          },
+          "WinRT.Runtime.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.48161"
+          }
+        }
+      },
+      "GlassDesk.Core/1.4.0": {
+        "runtime": {
+          "GlassDesk.Core.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "GlassDesk.Platform/1.4.0": {
+        "runtime": {
+          "GlassDesk.Platform.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GlassDesk.UI/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.26100.57": {
+      "type": "runtimepack",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.Core/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.Platform/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

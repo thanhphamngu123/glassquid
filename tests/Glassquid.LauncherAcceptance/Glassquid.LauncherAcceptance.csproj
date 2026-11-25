@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Glassquid.Dock\Glassquid.Dock.csproj" />
+    <ProjectReference Include="..\..\src\Glassquid.Launcher\Glassquid.Launcher.csproj" />
+    <ProjectReference Include="..\..\src\Glassquid.AppServices\Glassquid.AppServices.csproj" />
+    <ProjectReference Include="..\..\src\Glassquid.Settings\Glassquid.Settings.csproj" />
+  </ItemGroup>
+</Project>

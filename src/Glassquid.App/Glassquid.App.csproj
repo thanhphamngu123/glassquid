@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Application host: the only executable this product ships.
+
+    Owns single-instance arbitration, the tray icon, the data directory and the lifetime of
+    the Dock, launchpad and settings windows. Every other project is a library.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <RootNamespace>Glassquid.App</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>Glassquid</AssemblyName>
+    <StartupObject>Glassquid.App.Program</StartupObject>
+    <ApplicationIcon>Assets\Glassquid.ico</ApplicationIcon>
+
+    <!-- Hiển thị trong hộp thoại thuộc tính tệp và được shell dùng để hiển thị tệp thực thi. -->
+    <AssemblyTitle>Glassquid</AssemblyTitle>
+    <Description>Bộ công cụ làm đẹp màn hình Windows: thanh Dock kính, Launchpad và trung tâm cài đặt hợp nhất</Description>
+
+    <!--
+      Tệp kê khai đã khai báo PerMonitorV2. Đây không phải tùy chọn: nếu thiếu, tiến trình sẽ ở chế độ System Aware,
+      GetDpiForMonitor sẽ trả về DPI hệ thống cho mọi màn hình và mọi truy vấn DPI theo từng màn hình đều bị sai lệch.
+      Xem thêm giải thích trong app.manifest.
+    -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Glassquid.AppServices\Glassquid.AppServices.csproj" />
+    <ProjectReference Include="..\Glassquid.Core\Glassquid.Core.csproj" />
+    <ProjectReference Include="..\Glassquid.Platform\Glassquid.Platform.csproj" />
+    <ProjectReference Include="..\Glassquid.UI\Glassquid.UI.csproj" />
+    <ProjectReference Include="..\Glassquid.Dock\Glassquid.Dock.csproj" />
+    <ProjectReference Include="..\Glassquid.Launcher\Glassquid.Launcher.csproj" />
+    <ProjectReference Include="..\Glassquid.Settings\Glassquid.Settings.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets/GlassquidBrand.png" />
+    <Content Include="../../LICENSE" Link="LICENSE.txt"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../NOTICE" Link="NOTICE.txt"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Assets/Glassquid.ico" Link="Glassquid.ico"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../packaging/update-source.json" Link="update-source.json"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../docs/third-party/android-liquid-glass/LICENSE"
+             Link="licenses/AndroidLiquidGlass-LICENSE.txt"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../docs/third-party/android-liquid-glass/NOTICE.md"
+             Link="licenses/AndroidLiquidGlass-NOTICE.md"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../Glassquid.Dock/Assets/FluentUI-System-Icons-LICENSE.txt"
+             Link="licenses/FluentUI-System-Icons-LICENSE.txt"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

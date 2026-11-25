@@ -1,0 +1,193 @@
+<controls:GlassWindow
+    x:Class="Glassquid.Dock.BluetoothDevicesFlyoutWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Glassquid.UI.Controls;assembly=Glassquid.UI"
+    Title="Bluetooth"
+    AutomationProperties.Name="Thiết bị Bluetooth"
+    ShowInTaskbar="False"
+    WindowStartupLocation="Manual"
+    SizeToContent="WidthAndHeight"
+    Topmost="True"
+    SnapsToDevicePixels="True"
+    Deactivated="OnPopupDeactivated"
+    PreviewKeyDown="OnPopupPreviewKeyDown">
+
+  <controls:GlassWindow.Resources>
+    <Style x:Key="PanelButton" TargetType="Button">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="ButtonSurface" Background="{TemplateBinding Background}" CornerRadius="12">
+              <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="ButtonSurface" Property="Background" Value="#20FFFFFF" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="ButtonSurface" Property="Background" Value="#38FFFFFF" />
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.55" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource PanelButton}">
+      <Setter Property="Padding" Value="10,5" />
+      <Setter Property="MinHeight" Value="30" />
+      <Setter Property="Background" Value="#18FFFFFF" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="ButtonSurface" Background="{TemplateBinding Background}" BorderBrush="#28FFFFFF"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+              <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#30FFFFFF" /></Trigger>
+              <Trigger Property="IsPressed" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#48FFFFFF" /></Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.55" /></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </controls:GlassWindow.Resources>
+
+  <Border Background="Transparent" SnapsToDevicePixels="True">
+    <Grid x:Name="PopupVisualRoot" Opacity="0" RenderTransformOrigin="0.5,0.5">
+      <Grid.RenderTransform>
+        <TranslateTransform x:Name="PopupSlideTransform" Y="12" />
+      </Grid.RenderTransform>
+      <controls:LiquidGlassSurface x:Name="GlassSurface" />
+      <controls:PhoneBorder CornerRadius="{Binding PanelCornerRadius, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Padding="18,15"
+              Background="Transparent"
+              BorderBrush="{Binding PanelBorderBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+              BorderThickness="1.5">
+        <StackPanel Width="438">
+          <Grid Margin="2,0,2,10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="36" />
+              <ColumnDefinition Width="30" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource PanelButton}" Width="32" Height="34" Click="OnBackClick"
+                    ToolTip="Đóng bảng Bluetooth" AutomationProperties.Name="Quay lại">
+              <TextBlock Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Button>
+            <Path x:Name="HeaderBluetoothIcon" Grid.Column="1" Width="21" Height="21" Stretch="Uniform"
+                  VerticalAlignment="Center" Fill="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <TextBlock Grid.Column="2" Text="Bluetooth" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"
+                       Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <Button x:Name="BluetoothPowerButton" Grid.Column="3" Width="52" Height="30" HorizontalAlignment="Right"
+                    Style="{StaticResource PanelButton}" Click="OnBluetoothPowerClick"
+                    ToolTip="Bật hoặc tắt Bluetooth" AutomationProperties.Name="Bật hoặc tắt Bluetooth">
+              <Border x:Name="BluetoothToggleTrack" Width="50" Height="26" CornerRadius="13" Background="#38FFFFFF">
+                <Ellipse x:Name="BluetoothToggleKnob" Width="20" Height="20" Margin="3" HorizontalAlignment="Left" Fill="White" />
+              </Border>
+            </Button>
+          </Grid>
+
+          <TextBlock x:Name="BluetoothStatusText" Text="Đang kiểm tra Bluetooth…" Margin="12,0,12,12" FontSize="12" Opacity="0.78"
+                     Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+
+          <TextBlock Text="Thiết bị của bạn" Margin="10,0,0,6" FontSize="14" FontWeight="SemiBold"
+                     Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl x:Name="PairedDevicesList">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Background="#0FFFFFFF" CornerRadius="12" Padding="9,7" Margin="0,2">
+                    <Grid>
+                      <Grid.ColumnDefinitions><ColumnDefinition Width="32" /><ColumnDefinition Width="*" /><ColumnDefinition Width="66" /><ColumnDefinition Width="52" /></Grid.ColumnDefinitions>
+                      <Path Data="{Binding IconGeometry}" Width="21" Height="21" Stretch="Uniform" VerticalAlignment="Center"
+                            Fill="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="5,0,3,0">
+                        <TextBlock Text="{Binding Name}" FontSize="13" TextTrimming="CharacterEllipsis"
+                                   Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                        <TextBlock Text="{Binding Status}" FontSize="11" Opacity="0.72"
+                                   Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      </StackPanel>
+                      <Button Grid.Column="2" Style="{StaticResource ActionButton}" Margin="2,0" Tag="{Binding}"
+                              Click="OnManageDeviceClick" ToolTip="Mở tùy chọn thiết bị">
+                        <TextBlock Text="Quản lý" FontSize="10" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      </Button>
+                      <Button Grid.Column="3" Style="{StaticResource ActionButton}" Margin="2,0" Tag="{Binding}"
+                              Click="OnRemoveDeviceClick" ToolTip="Hủy ghép đôi thiết bị">
+                        <TextBlock Text="Gỡ" FontSize="10" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      </Button>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+          <TextBlock x:Name="PairedEmptyText" Text="Chưa tìm thấy thiết bị đã ghép đôi." Margin="12,5,8,8" FontSize="12" Opacity="0.72"
+                     Visibility="Collapsed" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+
+          <Border Height="1" Margin="0,8,0,10" Background="#28FFFFFF" />
+          <Grid Margin="10,0,2,6">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <TextBlock Text="Thiết bị mới" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"
+                       Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <Button Grid.Column="1" Style="{StaticResource PanelButton}" Padding="8,3" Click="OnRefreshDevicesClick"
+                    ToolTip="Quét lại thiết bị Bluetooth" AutomationProperties.Name="Quét lại thiết bị Bluetooth">
+              <TextBlock Text="Quét lại" FontSize="11" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            </Button>
+          </Grid>
+          <ScrollViewer Height="142" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl x:Name="NewDevicesList">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Background="#0FFFFFFF" CornerRadius="12" Padding="9,7" Margin="0,2">
+                    <Grid>
+                      <Grid.ColumnDefinitions><ColumnDefinition Width="32" /><ColumnDefinition Width="*" /><ColumnDefinition Width="78" /></Grid.ColumnDefinitions>
+                      <Path Data="{Binding IconGeometry}" Width="21" Height="21" Stretch="Uniform" VerticalAlignment="Center"
+                            Fill="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="5,0,3,0">
+                        <TextBlock Text="{Binding Name}" FontSize="13" TextTrimming="CharacterEllipsis"
+                                   Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                        <TextBlock Text="{Binding Status}" FontSize="11" Opacity="0.72"
+                                   Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      </StackPanel>
+                      <Button Grid.Column="2" Style="{StaticResource ActionButton}" Margin="3,0,0,0" Tag="{Binding}"
+                              Click="OnPairDeviceClick">
+                        <TextBlock Text="Ghép đôi" FontSize="10" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      </Button>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+          <TextBlock x:Name="NewDevicesEmptyText" Text="Bật chế độ ghép đôi trên thiết bị để Glassquid tìm thấy thiết bị đó."
+                     Margin="12,5,8,8" FontSize="12" TextWrapping="Wrap" Opacity="0.72"
+                     Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          <TextBlock x:Name="OperationStatusText" Visibility="Collapsed" Margin="10,5,10,0" FontSize="11" TextWrapping="Wrap"
+                     Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+
+          <Border Height="1" Margin="0,8,0,3" Background="#28FFFFFF" />
+          <Button Style="{StaticResource PanelButton}" Height="40" Padding="10,0" HorizontalContentAlignment="Left"
+                  Click="OnMoreSettingsClick" AutomationProperties.Name="Cài đặt Bluetooth khác">
+            <TextBlock Text="Cài đặt Bluetooth khác" FontSize="12" Opacity="0.82"
+                       Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          </Button>
+        </StackPanel>
+      </controls:PhoneBorder>
+    </Grid>
+  </Border>
+</controls:GlassWindow>

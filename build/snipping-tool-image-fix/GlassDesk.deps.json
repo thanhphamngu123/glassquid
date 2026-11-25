@@ -1,0 +1,260 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "GlassDesk/1.4.0": {
+        "dependencies": {
+          "GlassDesk.AppServices": "1.4.0",
+          "GlassDesk.Core": "1.4.0",
+          "GlassDesk.Dock": "1.4.0",
+          "GlassDesk.Launcher": "1.4.0",
+          "GlassDesk.Platform": "1.4.0",
+          "GlassDesk.Settings": "1.4.0",
+          "GlassDesk.UI": "1.4.0",
+          "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.26100.57"
+        },
+        "runtime": {
+          "GlassDesk.dll": {}
+        }
+      },
+      "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.26100.57": {
+        "runtime": {
+          "Microsoft.Windows.SDK.NET.dll": {
+            "assemblyVersion": "10.0.26100.38",
+            "fileVersion": "10.0.26100.55"
+          },
+          "WinRT.Runtime.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.48161"
+          }
+        }
+      },
+      "System.Data.OleDb/8.0.1": {
+        "runtime": {
+          "lib/net8.0/System.Data.OleDb.dll": {
+            "assemblyVersion": "8.0.0.1",
+            "fileVersion": "8.0.1024.46610"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.Data.OleDb.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "8.0.0.1",
+            "fileVersion": "8.0.1024.46610"
+          }
+        }
+      },
+      "System.ServiceProcess.ServiceController/8.0.1": {
+        "runtime": {
+          "lib/net8.0/System.ServiceProcess.ServiceController.dll": {
+            "assemblyVersion": "8.0.0.1",
+            "fileVersion": "8.0.1024.46610"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.ServiceProcess.ServiceController.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "8.0.0.1",
+            "fileVersion": "8.0.1024.46610"
+          }
+        }
+      },
+      "GlassDesk.AppServices/1.4.0": {
+        "dependencies": {
+          "GlassDesk.Core": "1.4.0",
+          "GlassDesk.Platform": "1.4.0"
+        },
+        "runtime": {
+          "GlassDesk.AppServices.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "GlassDesk.Core/1.4.0": {
+        "runtime": {
+          "GlassDesk.Core.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "GlassDesk.Dock/1.4.0": {
+        "dependencies": {
+          "GlassDesk.AppServices": "1.4.0",
+          "GlassDesk.Core": "1.4.0",
+          "GlassDesk.UI": "1.4.0",
+          "ManagedShell.WindowsTray": "1.4.0"
+        },
+        "runtime": {
+          "GlassDesk.Dock.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "GlassDesk.Launcher/1.4.0": {
+        "dependencies": {
+          "GlassDesk.AppServices": "1.4.0",
+          "GlassDesk.Core": "1.4.0",
+          "GlassDesk.UI": "1.4.0"
+        },
+        "runtime": {
+          "GlassDesk.Launcher.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "GlassDesk.Platform/1.4.0": {
+        "runtime": {
+          "GlassDesk.Platform.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "GlassDesk.Settings/1.4.0": {
+        "dependencies": {
+          "GlassDesk.Core": "1.4.0",
+          "GlassDesk.UI": "1.4.0"
+        },
+        "runtime": {
+          "GlassDesk.Settings.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "GlassDesk.UI/1.4.0": {
+        "dependencies": {
+          "GlassDesk.Core": "1.4.0",
+          "GlassDesk.Platform": "1.4.0"
+        },
+        "runtime": {
+          "GlassDesk.UI.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "ManagedShell.Common/1.4.0": {
+        "dependencies": {
+          "ManagedShell.Interop": "1.4.0",
+          "System.Data.OleDb": "8.0.1"
+        },
+        "runtime": {
+          "ManagedShell.Common.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "ManagedShell.Interop/1.4.0": {
+        "dependencies": {
+          "System.ServiceProcess.ServiceController": "8.0.1"
+        },
+        "runtime": {
+          "ManagedShell.Interop.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "ManagedShell.WindowsTray/1.4.0": {
+        "dependencies": {
+          "ManagedShell.Common": "1.4.0",
+          "ManagedShell.Interop": "1.4.0"
+        },
+        "runtime": {
+          "ManagedShell.WindowsTray.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GlassDesk/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.26100.57": {
+      "type": "runtimepack",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "System.Data.OleDb/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RO+/y2ggU5956uQDRXdjA1e2l5yJ4rTWNX76eZ+3sgtYGqGapCe2kQCyiUci+/y6Fyb21Irp4RQEdfrIiuYrxQ==",
+      "path": "system.data.oledb/8.0.1",
+      "hashPath": "system.data.oledb.8.0.1.nupkg.sha512"
+    },
+    "System.ServiceProcess.ServiceController/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-02I0BXo1kmMBgw03E8Hu4K6nTqur4wpQdcDZrndczPzY2fEoGvlinE35AWbyzLZ2h2IksEZ6an4tVt3hi9j1oA==",
+      "path": "system.serviceprocess.servicecontroller/8.0.1",
+      "hashPath": "system.serviceprocess.servicecontroller.8.0.1.nupkg.sha512"
+    },
+    "GlassDesk.AppServices/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.Core/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.Dock/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.Launcher/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.Platform/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.Settings/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GlassDesk.UI/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ManagedShell.Common/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ManagedShell.Interop/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ManagedShell.WindowsTray/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,901 @@
+<controls:GlassWindow
+    x:Class="Glassquid.Dock.QuickSettingsFlyoutWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Glassquid.UI.Controls;assembly=Glassquid.UI"
+    Title="Cài đặt nhanh Glassquid"
+    AutomationProperties.Name="Trung tâm điều khiển Glassquid"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="Manual"
+    Topmost="True"
+    SnapsToDevicePixels="True"
+    Deactivated="OnPopupDeactivated"
+    PreviewKeyDown="OnPopupPreviewKeyDown">
+
+  <controls:GlassWindow.Resources>
+    <FontFamily x:Key="PanelIconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+    <Style x:Key="PlainIconButton" TargetType="Button">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="QuickTileButton" TargetType="Button">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid SnapsToDevicePixels="True">
+              <!-- Glass 2x1 capsule body with specular top & bottom light rim borders -->
+              <Border x:Name="Tile" Background="{TemplateBinding Background}" CornerRadius="22"
+                      BorderThickness="1.5" Padding="{TemplateBinding Padding}">
+                <Border.BorderBrush>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                    <GradientStop Color="#10FFFFFF" Offset="0.4" />
+                    <GradientStop Color="#08FFFFFF" Offset="0.6" />
+                    <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                  </LinearGradientBrush>
+                </Border.BorderBrush>
+                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+              </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Tile" Property="Opacity" Value="0.88" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Tile" Property="Opacity" Value="0.72" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="CircularQuickTileButton" TargetType="Button" BasedOn="{StaticResource QuickTileButton}">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid SnapsToDevicePixels="True">
+              <!-- Glass circle body with specular top & bottom light rim borders -->
+              <Border x:Name="Tile" Background="{TemplateBinding Background}" CornerRadius="33"
+                      BorderThickness="1.5" Padding="{TemplateBinding Padding}">
+                <Border.BorderBrush>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                    <GradientStop Color="#10FFFFFF" Offset="0.4" />
+                    <GradientStop Color="#08FFFFFF" Offset="0.6" />
+                    <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                  </LinearGradientBrush>
+                </Border.BorderBrush>
+                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+              </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Tile" Property="Opacity" Value="0.88" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Tile" Property="Opacity" Value="0.72" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="SquareQuickTileButton" TargetType="Button" BasedOn="{StaticResource QuickTileButton}">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid SnapsToDevicePixels="True">
+              <!-- Glass 4-grid square body with specular top & bottom light rim borders -->
+              <Border x:Name="Tile" Background="{TemplateBinding Background}" CornerRadius="26"
+                      BorderThickness="1.5" Padding="{TemplateBinding Padding}">
+                <Border.BorderBrush>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                    <GradientStop Color="#10FFFFFF" Offset="0.3" />
+                    <GradientStop Color="#08FFFFFF" Offset="0.7" />
+                    <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                  </LinearGradientBrush>
+                </Border.BorderBrush>
+                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+              </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Tile" Property="Opacity" Value="0.88" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Tile" Property="Opacity" Value="0.72" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="MediaControlButton" TargetType="Button" BasedOn="{StaticResource QuickTileButton}">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Tile" Background="{TemplateBinding Background}" CornerRadius="999" Padding="{TemplateBinding Padding}">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Tile" Property="Background" Value="#30FFFFFF" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Tile" Property="Background" Value="#45FFFFFF" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="EditableControlButton" TargetType="Button" BasedOn="{StaticResource QuickTileButton}">
+      <Setter Property="Background" Value="#303A4149" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+              <Border x:Name="OuterRing" Background="{TemplateBinding Background}" BorderBrush="#35FFFFFF"
+                      BorderThickness="2" CornerRadius="999" />
+              <Border Margin="7" Background="#20FFFFFF" BorderBrush="#12FFFFFF" BorderThickness="4" CornerRadius="999" />
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+              <Border Width="24" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-2"
+                      Background="#555D64" BorderBrush="#929BA3" BorderThickness="1" CornerRadius="12">
+                <TextBlock Text="−" FontSize="18" FontWeight="Medium" Foreground="White"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" />
+              </Border>
+              <Border Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-2"
+                      Background="#505A62" BorderBrush="#70818D" BorderThickness="1" CornerRadius="13" />
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="OuterRing" Property="Opacity" Value="0.86" /></Trigger>
+              <Trigger Property="IsPressed" Value="True"><Setter TargetName="OuterRing" Property="Opacity" Value="0.70" /></Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.55" /></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="EditableWideControlButton" TargetType="Button" BasedOn="{StaticResource QuickTileButton}">
+      <Setter Property="Background">
+        <Setter.Value>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#24FFFFFF" Offset="0" /><GradientStop Color="#12FFFFFF" Offset="1" />
+          </LinearGradientBrush>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+              <Border x:Name="OuterTile" Background="{TemplateBinding Background}" BorderBrush="#20FFFFFF"
+                      BorderThickness="1" CornerRadius="22" />
+              <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+              <Border Width="24" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-2"
+                      Background="#555D64" BorderBrush="#929BA3" BorderThickness="1" CornerRadius="12">
+                <TextBlock Text="−" FontSize="18" FontWeight="Medium" Foreground="White"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" />
+              </Border>
+              <Border Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-2"
+                      Background="#505A62" BorderBrush="#70818D" BorderThickness="1" CornerRadius="13" />
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="OuterTile" Property="Opacity" Value="0.88" /></Trigger>
+              <Trigger Property="IsPressed" Value="True"><Setter TargetName="OuterTile" Property="Opacity" Value="0.72" /></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="SoundOutputFlyoutOpenButton" TargetType="Button">
+      <Setter Property="Width" Value="28" />
+      <Setter Property="Height" Value="28" />
+      <Setter Property="Background" Value="#15FFFFFF" />
+      <Setter Property="BorderBrush" Value="#25FFFFFF" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="BtnSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="14">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="BtnSurface" Property="Background" Value="#30FFFFFF" />
+                <Setter TargetName="BtnSurface" Property="BorderBrush" Value="#45FFFFFF" />
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="BtnSurface" Property="Background" Value="#48FFFFFF" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="PanelSlider" TargetType="Slider">
+      <Setter Property="Minimum" Value="0" />
+      <Setter Property="Maximum" Value="100" />
+      <Setter Property="Value" Value="50" />
+      <Setter Property="Height" Value="28" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Slider">
+            <Grid Height="28">
+              <Border Height="4" Margin="0,0,0,0" VerticalAlignment="Center" CornerRadius="2" Background="#28FFFFFF" />
+              <Track x:Name="PART_Track" VerticalAlignment="Center" IsDirectionReversed="False">
+                <Track.DecreaseRepeatButton>
+                  <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Background="#A6FFFFFF" BorderThickness="0" Focusable="False">
+                    <RepeatButton.Template>
+                      <ControlTemplate TargetType="RepeatButton">
+                        <Border Height="4" VerticalAlignment="Center" Background="{TemplateBinding Background}" CornerRadius="2" />
+                      </ControlTemplate>
+                    </RepeatButton.Template>
+                  </RepeatButton>
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                  <Thumb Width="30" Height="18" Cursor="Hand">
+                    <Thumb.Template>
+                      <ControlTemplate TargetType="Thumb">
+                        <Grid SnapsToDevicePixels="True">
+                          <!-- Outer vector soft shadow for floating depth -->
+                          <Border CornerRadius="9" Margin="0,1.5,0,-1.5" Background="#22000000" />
+
+                          <!-- Glass body with translucent gradient and specular rim border -->
+                          <Border x:Name="ThumbGlassBody" CornerRadius="9" BorderThickness="1">
+                            <Border.Background>
+                              <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#55FFFFFF" Offset="0" />
+                                <GradientStop Color="#20FFFFFF" Offset="0.45" />
+                                <GradientStop Color="#10FFFFFF" Offset="0.55" />
+                                <GradientStop Color="#30FFFFFF" Offset="1" />
+                              </LinearGradientBrush>
+                            </Border.Background>
+                            <Border.BorderBrush>
+                              <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#B8FFFFFF" Offset="0" />
+                                <GradientStop Color="#40FFFFFF" Offset="0.45" />
+                                <GradientStop Color="#65FFFFFF" Offset="1" />
+                              </LinearGradientBrush>
+                            </Border.BorderBrush>
+
+                            <!-- Upper glass reflection glint -->
+                            <Border Height="8" VerticalAlignment="Top" Margin="1,1,1,0" CornerRadius="8,8,3,3">
+                              <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                  <GradientStop Color="#50FFFFFF" Offset="0" />
+                                  <GradientStop Color="#00FFFFFF" Offset="1" />
+                                </LinearGradientBrush>
+                              </Border.Background>
+                            </Border>
+                          </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                          <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ThumbGlassBody" Property="Background">
+                              <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                  <GradientStop Color="#75FFFFFF" Offset="0" />
+                                  <GradientStop Color="#35FFFFFF" Offset="0.45" />
+                                  <GradientStop Color="#20FFFFFF" Offset="0.55" />
+                                  <GradientStop Color="#45FFFFFF" Offset="1" />
+                                </LinearGradientBrush>
+                              </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="ThumbGlassBody" Property="BorderBrush">
+                              <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                  <GradientStop Color="#EFFFFFFF" Offset="0" />
+                                  <GradientStop Color="#60FFFFFF" Offset="0.45" />
+                                  <GradientStop Color="#85FFFFFF" Offset="1" />
+                                </LinearGradientBrush>
+                              </Setter.Value>
+                            </Setter>
+                          </Trigger>
+                          <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="ThumbGlassBody" Property="Background">
+                              <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                  <GradientStop Color="#90FFFFFF" Offset="0" />
+                                  <GradientStop Color="#45FFFFFF" Offset="0.45" />
+                                  <GradientStop Color="#28FFFFFF" Offset="0.55" />
+                                  <GradientStop Color="#60FFFFFF" Offset="1" />
+                                </LinearGradientBrush>
+                              </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="ThumbGlassBody" Property="BorderBrush">
+                              <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                  <GradientStop Color="#FFFFFFFF" Offset="0" />
+                                  <GradientStop Color="#75FFFFFF" Offset="0.45" />
+                                  <GradientStop Color="#95FFFFFF" Offset="1" />
+                                </LinearGradientBrush>
+                              </Setter.Value>
+                            </Setter>
+                          </Trigger>
+                        </ControlTemplate.Triggers>
+                      </ControlTemplate>
+                    </Thumb.Template>
+                  </Thumb>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                  <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Background="#20FFFFFF" BorderThickness="0" Focusable="False">
+                    <RepeatButton.Template>
+                      <ControlTemplate TargetType="RepeatButton">
+                        <Border Height="4" VerticalAlignment="Center" Background="{TemplateBinding Background}" CornerRadius="2" />
+                      </ControlTemplate>
+                    </RepeatButton.Template>
+                  </RepeatButton>
+                </Track.IncreaseRepeatButton>
+              </Track>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </controls:GlassWindow.Resources>
+
+  <Border Background="Transparent" SnapsToDevicePixels="True">
+    <Grid x:Name="PopupVisualRoot" Opacity="0" RenderTransformOrigin="0.5,1">
+      <Grid.RenderTransform>
+        <TranslateTransform x:Name="PopupSlideTransform" Y="16" />
+      </Grid.RenderTransform>
+      <controls:LiquidGlassSurface x:Name="GlassSurface" />
+      <controls:PhoneBorder CornerRadius="{Binding PanelCornerRadius, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Padding="14" Background="Transparent"
+              BorderBrush="{Binding PanelBorderBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+              BorderThickness="1.5">
+        <StackPanel Width="308">
+          <Grid Margin="4,1,4,12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="PanelTitleText" Grid.Column="0" Text="Trung tâm điều khiển" FontSize="14" FontWeight="SemiBold"
+                       Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" VerticalAlignment="Center" />
+            <Button x:Name="EditControlsButton" Grid.Column="1" Style="{StaticResource PlainIconButton}"
+                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Click="OnPanelHeaderActionClick" AutomationProperties.Name="Chỉnh sửa giao diện">
+              <Border x:Name="EditControlsButtonBubble" CornerRadius="12" Padding="8,4"
+                      Background="#18FFFFFF" BorderBrush="#24FFFFFF" BorderThickness="1">
+                <TextBlock x:Name="EditControlsButtonText" Text="Chỉnh sửa" FontSize="11" FontWeight="Medium"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" VerticalAlignment="Center" />
+              </Border>
+            </Button>
+          </Grid>
+
+          <Grid x:Name="NormalControlsPanel" Width="280">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" />
+              <RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" />
+            </Grid.RowDefinitions>
+
+            <!-- Wi-Fi Button -->
+            <Button x:Name="WifiQuickButton" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource QuickTileButton}"
+                    Height="66" Margin="2" Padding="13,8" HorizontalContentAlignment="Stretch"
+                    Click="OnWifiTileClick" ToolTip="Mở danh sách mạng Wi-Fi" AutomationProperties.Name="Mở Wi-Fi">
+              <Button.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                  <GradientStop Color="#24FFFFFF" Offset="0" /><GradientStop Color="#12FFFFFF" Offset="1" />
+                </LinearGradientBrush>
+              </Button.Background>
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="WifiIconBubble" Width="40" Height="40" CornerRadius="20" Background="#28FFFFFF" VerticalAlignment="Center">
+                  <TextBlock x:Name="WifiIcon" Text="&#xE701;" FontFamily="{StaticResource PanelIconFont}" FontSize="20" Foreground="White"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel x:Name="WifiTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0">
+                  <TextBlock x:Name="WifiNameText" Text="Wi-Fi" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock x:Name="NetworkStatusText" Text="Trạng thái mạng" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Bluetooth Button -->
+            <Button x:Name="BluetoothButton" Grid.Row="1" Grid.Column="0" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#18FFFFFF"
+                    ToolTip="Bluetooth" AutomationProperties.Name="Bluetooth" Click="OnBluetoothButtonClick"
+                    PreviewMouseLeftButtonDown="OnBluetoothButtonPreviewMouseDown" PreviewMouseLeftButtonUp="OnBluetoothButtonPreviewMouseUp">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="BluetoothIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <Path x:Name="BluetoothIcon" Width="22" Height="22" Stretch="Uniform" Fill="White" />
+                </Border>
+                <StackPanel x:Name="BluetoothTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock x:Name="BluetoothTitleText" Text="Bluetooth" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock x:Name="BluetoothStatusText" Text="Đang tắt" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Airplane Mode Button -->
+            <Button x:Name="AirplaneButton" Grid.Row="1" Grid.Column="1" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#18FFFFFF"
+                    ToolTip="Chế độ máy bay" AutomationProperties.Name="Chế độ máy bay" Click="OnAirplaneButtonClick">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="AirplaneIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <Path x:Name="AirplaneIcon" Width="22" Height="22" Stretch="Uniform" Fill="White" />
+                </Border>
+                <StackPanel x:Name="AirplaneTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock x:Name="AirplaneTitleText" Text="Chế độ máy bay" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock x:Name="AirplaneStatusText" Text="Đang tắt" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Media Player Border -->
+            <Border x:Name="MediaPlayerBorder" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2" CornerRadius="24" Padding="9,7" Margin="2"
+                    Background="#18FFFFFF" BorderThickness="1.5">
+              <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                  <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                  <GradientStop Color="#10FFFFFF" Offset="0.3" />
+                  <GradientStop Color="#08FFFFFF" Offset="0.7" />
+                  <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                </LinearGradientBrush>
+              </Border.BorderBrush>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border x:Name="MediaThumbnailBorder" Width="42" Height="42" CornerRadius="14" Background="#268DB5FF" HorizontalAlignment="Left" VerticalAlignment="Top">
+                  <TextBlock x:Name="MediaFallbackIcon" Text="&#xE768;" FontFamily="{StaticResource PanelIconFont}" FontSize="18"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel Grid.Row="1" Margin="0,3,0,0">
+                  <TextBlock x:Name="MediaTitleText" Text="Đang phát" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                  <TextBlock x:Name="MediaArtistText" Text="Không có nội dung" FontSize="10.5" Opacity="0.75"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" Margin="0,1,0,0" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,3,0,0">
+                  <Button x:Name="MediaPrevButton" Style="{StaticResource MediaControlButton}" Width="28" Height="28" Padding="0"
+                          Background="Transparent" BorderThickness="0" Margin="0,0,6,0" ToolTip="Bài trước"
+                          Click="OnMediaPrevButtonClick" AutomationProperties.Name="Bài trước">
+                    <TextBlock Text="&#xE892;" FontFamily="{StaticResource PanelIconFont}" FontSize="14"
+                               Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Button>
+                  <Button x:Name="MediaPlayPauseButton" Style="{StaticResource MediaControlButton}" Width="34" Height="34" Padding="0"
+                          Background="#22FFFFFF" BorderThickness="0" Margin="0,0,6,0" ToolTip="Phát / Tạm dừng"
+                          Click="OnMediaPlayPauseButtonClick" AutomationProperties.Name="Phát hoặc tạm dừng">
+                    <TextBlock x:Name="MediaPlayPauseIcon" Text="&#xE768;" FontFamily="{StaticResource PanelIconFont}" FontSize="16"
+                               Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Button>
+                  <Button x:Name="MediaNextButton" Style="{StaticResource MediaControlButton}" Width="28" Height="28" Padding="0"
+                          Background="Transparent" BorderThickness="0" ToolTip="Bài tiếp theo"
+                          Click="OnMediaNextButtonClick" AutomationProperties.Name="Bài tiếp theo">
+                    <TextBlock Text="&#xE893;" FontFamily="{StaticResource PanelIconFont}" FontSize="14"
+                               Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Button>
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <!-- Display Projection Button -->
+            <Button x:Name="DisplayProjectionButton" Grid.Row="2" Grid.Column="0"
+                    Style="{StaticResource CircularQuickTileButton}" Click="OnDisplayProjectionButtonClick"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="#18FFFFFF" ToolTip="Chiếu màn hình · Windows + P"
+                    AutomationProperties.Name="Chiếu màn hình">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="DisplayProjectionIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <TextBlock Text="&#xE7F4;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel x:Name="DisplayProjectionTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock Text="Chiếu màn hình" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock Text="Windows + P" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Night Light Button -->
+            <Button x:Name="NightLightButton" Grid.Row="2" Grid.Column="2" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="#18FFFFFF" ToolTip="Night light · nhấn giữ để chỉnh cường độ" AutomationProperties.Name="Night light"
+                    Click="OnNightLightButtonClick" PreviewMouseLeftButtonDown="OnNightLightButtonPreviewMouseDown"
+                    PreviewMouseLeftButtonUp="OnNightLightButtonPreviewMouseUp">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="NightLightIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <TextBlock x:Name="NightLightIcon" Text="&#xE708;" FontFamily="{StaticResource PanelIconFont}"
+                             FontSize="22" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel x:Name="NightLightTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock x:Name="NightLightTitleText" Text="Night light" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock x:Name="NightLightStatusText" Text="Đang tắt" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Energy Saver Button -->
+            <Button x:Name="EnergySaverButton" Grid.Row="2" Grid.Column="3" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="#18FFFFFF" ToolTip="Tiết kiệm năng lượng" AutomationProperties.Name="Tiết kiệm năng lượng"
+                    Click="OnEnergySaverButtonClick">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="EnergySaverIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <Path x:Name="EnergySaverIcon" Width="28" Height="28" Stretch="Uniform"
+                        Fill="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                </Border>
+                <StackPanel x:Name="EnergySaverTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock x:Name="EnergySaverTitleText" Text="Tiết kiệm pin" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock x:Name="EnergySaverStatusText" Text="Đang tắt" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Brightness Slider Panel -->
+            <Border x:Name="NormalBrightnessPanel" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" CornerRadius="22" Padding="14,8,14,7" Margin="2"
+                    Background="#18FFFFFF" BorderThickness="1.5">
+              <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                  <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                  <GradientStop Color="#10FFFFFF" Offset="0.4" />
+                  <GradientStop Color="#08FFFFFF" Offset="0.6" />
+                  <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                </LinearGradientBrush>
+              </Border.BorderBrush>
+              <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <TextBlock x:Name="BrightnessStatusText" Text="Độ sáng" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Margin="2,0,0,2" />
+                <Grid Grid.Row="1" Margin="0,2,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="&#xE706;" FontFamily="{StaticResource PanelIconFont}" FontSize="13" Opacity="0.75"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             VerticalAlignment="Center" Margin="0,0,8,0" />
+                  <Slider x:Name="BrightnessSlider" Grid.Column="1" Style="{StaticResource PanelSlider}" Value="50"
+                          VerticalAlignment="Center" ToolTip="Điều chỉnh độ sáng màn hình" />
+                  <TextBlock Grid.Column="2" Text="&#xE706;" FontFamily="{StaticResource PanelIconFont}" FontSize="17" Opacity="1.0"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             VerticalAlignment="Center" Margin="8,0,0,0" />
+                </Grid>
+              </Grid>
+            </Border>
+
+            <!-- Volume Slider Panel -->
+            <Border x:Name="NormalVolumePanel" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" CornerRadius="22" Padding="14,8,14,7" Margin="2"
+                    Background="#18FFFFFF" BorderThickness="1.5">
+              <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                  <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                  <GradientStop Color="#10FFFFFF" Offset="0.4" />
+                  <GradientStop Color="#08FFFFFF" Offset="0.6" />
+                  <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                </LinearGradientBrush>
+              </Border.BorderBrush>
+              <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <TextBlock x:Name="VolumeStatusText" Text="Âm lượng" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Margin="2,0,0,2" />
+                <Grid Grid.Row="1" Margin="0,2,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock x:Name="VolumeIcon" Text="&#xE767;" FontFamily="{StaticResource PanelIconFont}" FontSize="15" Opacity="0.88"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             VerticalAlignment="Center" Margin="0,0,8,0" />
+                  <Slider x:Name="VolumeSlider" Grid.Column="1" Style="{StaticResource PanelSlider}" Value="50"
+                          VerticalAlignment="Center" ToolTip="Điều chỉnh âm lượng đầu ra" />
+                  <Button x:Name="OpenSoundOutputButton" Grid.Column="2" Style="{StaticResource SoundOutputFlyoutOpenButton}"
+                          Margin="6,0,0,0" Click="OnOpenSoundOutputClick"
+                          ToolTip="Đầu ra âm thanh và bộ trộn âm lượng" AutomationProperties.Name="Đầu ra âm thanh">
+                    <TextBlock Text="&#xE76C;" FontFamily="{StaticResource PanelIconFont}" FontSize="12"
+                               Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Border>
+
+            <!-- Battery Button -->
+            <Button x:Name="BatteryQuickButton" Grid.Row="5" Grid.Column="0" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#20FFFFFF"
+                    ToolTip="Pin" AutomationProperties.Name="Pin" Click="OnBatteryQuickButtonClick">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="BatteryIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <TextBlock x:Name="BatteryIcon" Text="&#xE8A7;" FontFamily="{StaticResource PanelIconFont}" FontSize="23"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel x:Name="BatteryTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock x:Name="BatteryTitleText" Text="Pin" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock x:Name="BatteryStatusText" Text="Trạng thái pin" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Calculator Button -->
+            <Button x:Name="CalculatorQuickButton" Grid.Row="5" Grid.Column="1" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#20FFFFFF"
+                    ToolTip="Máy tính" AutomationProperties.Name="Máy tính" Click="OnCalculatorQuickButtonClick">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="CalculatorIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <TextBlock x:Name="CalculatorIcon" Text="&#xE8EF;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel x:Name="CalculatorTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock Text="Máy tính" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock Text="Mở ứng dụng" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Clock Button -->
+            <Button x:Name="ClockQuickButton" Grid.Row="5" Grid.Column="2" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#20FFFFFF"
+                    ToolTip="Đồng hồ" AutomationProperties.Name="Đồng hồ" Click="OnClockQuickButtonClick">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="ClockIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <TextBlock x:Name="ClockIcon" Text="&#xE916;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel x:Name="ClockTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock Text="Đồng hồ" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock Text="Hẹn giờ &amp; Báo thức" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+
+            <!-- Camera Button -->
+            <Button x:Name="CameraQuickButton" Grid.Row="5" Grid.Column="3" Style="{StaticResource CircularQuickTileButton}"
+                    Width="66" Height="66" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#20FFFFFF"
+                    ToolTip="Máy ảnh" AutomationProperties.Name="Máy ảnh" Click="OnCameraQuickButtonClick">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="CameraIconBubble" VerticalAlignment="Center" HorizontalAlignment="Center">
+                  <TextBlock x:Name="CameraIcon" Text="&#xE722;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel x:Name="CameraTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed">
+                  <TextBlock Text="Máy ảnh" FontSize="14" FontWeight="SemiBold"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  <TextBlock Text="Chụp ảnh &amp; Video" FontSize="11" Opacity="0.82"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Grid>
+            </Button>
+          </Grid>
+          <Grid x:Name="EditControlsGrid" Width="280" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" />
+              <RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" />
+            </Grid.RowDefinitions>
+            <!-- Dynamic placeholder slots covering all 8 rows and 4 columns -->
+            <Grid x:Name="EditPlaceholdersGrid" Grid.Row="0" Grid.RowSpan="8" Grid.Column="0" Grid.ColumnSpan="4" IsHitTestVisible="False">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" />
+                <RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" /><RowDefinition Height="70" />
+              </Grid.RowDefinitions>
+            </Grid>
+            <!-- Brightness slider (edit mode mirror - draggable row position) -->
+            <Border x:Name="EditBrightnessPanel" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" CornerRadius="22" Padding="14,8,14,7" Margin="2"
+                    Background="#18FFFFFF" BorderThickness="1.5"
+                    Cursor="SizeAll" ToolTip="Kéo để đổi vị trí thanh độ sáng">
+              <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                  <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                  <GradientStop Color="#10FFFFFF" Offset="0.4" />
+                  <GradientStop Color="#08FFFFFF" Offset="0.6" />
+                  <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                </LinearGradientBrush>
+              </Border.BorderBrush>
+              <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <TextBlock Text="{Binding Text, ElementName=BrightnessStatusText}" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Margin="2,0,0,2" />
+                <Grid Grid.Row="1" Margin="0,2,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="&#xE706;" FontFamily="{StaticResource PanelIconFont}" FontSize="13" Opacity="0.75"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             VerticalAlignment="Center" Margin="0,0,8,0" />
+                  <Slider Grid.Column="1" Style="{StaticResource PanelSlider}" Value="{Binding Value, ElementName=BrightnessSlider}"
+                          IsHitTestVisible="False" VerticalAlignment="Center" />
+                  <TextBlock Grid.Column="2" Text="&#xE706;" FontFamily="{StaticResource PanelIconFont}" FontSize="17" Opacity="1.0"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             VerticalAlignment="Center" Margin="8,0,0,0" />
+                </Grid>
+              </Grid>
+            </Border>
+            <!-- Volume slider (edit mode mirror - draggable row position) -->
+            <Border x:Name="EditVolumePanel" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" CornerRadius="22" Padding="14,8,14,7" Margin="2"
+                    Background="#18FFFFFF" BorderThickness="1.5"
+                    Cursor="SizeAll" ToolTip="Kéo để đổi vị trí thanh âm lượng">
+              <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                  <GradientStop Color="#85FFFFFF" Offset="0.0" />
+                  <GradientStop Color="#10FFFFFF" Offset="0.4" />
+                  <GradientStop Color="#08FFFFFF" Offset="0.6" />
+                  <GradientStop Color="#55FFFFFF" Offset="1.0" />
+                </LinearGradientBrush>
+              </Border.BorderBrush>
+              <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <TextBlock Text="{Binding Text, ElementName=VolumeStatusText}" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Margin="2,0,0,2" />
+                <Grid Grid.Row="1" Margin="0,2,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="&#xE767;" FontFamily="{StaticResource PanelIconFont}" FontSize="15" Opacity="0.88"
+                             Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             VerticalAlignment="Center" Margin="0,0,8,0" />
+                  <Slider Grid.Column="1" Style="{StaticResource PanelSlider}" Value="{Binding Value, ElementName=VolumeSlider}"
+                          IsHitTestVisible="False" VerticalAlignment="Center" />
+                  <Border Grid.Column="2" Width="28" Height="28" CornerRadius="14" Background="#15FFFFFF" BorderBrush="#25FFFFFF" BorderThickness="1" Margin="6,0,0,0">
+                    <TextBlock Text="&#xE76C;" FontFamily="{StaticResource PanelIconFont}" FontSize="12"
+                               Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                </Grid>
+              </Grid>
+            </Border>
+            <!-- Dynamic tile buttons are generated in code-behind via BuildEditTiles() -->
+          </Grid>
+          <!-- Hidden controls tray (visible only in edit mode when at least one control is hidden) -->
+          <Border x:Name="EditHiddenControlsPanel" Width="280" Margin="2,6,2,0" Padding="10,8"
+                  CornerRadius="18" Background="#16FFFFFF" BorderBrush="#26FFFFFF" BorderThickness="1"
+                  Visibility="Collapsed">
+            <StackPanel>
+              <DockPanel Margin="2,0,2,6">
+                <Button x:Name="RestoreDefaultLayoutButton" DockPanel.Dock="Right" Style="{StaticResource PlainIconButton}"
+                        Click="OnRestoreDefaultLayoutClick" ToolTip="Khôi phục toàn bộ bố cục mặc định"
+                        AutomationProperties.Name="Khôi phục mặc định">
+                  <Border CornerRadius="10" Padding="7,3" Background="#20FFFFFF" BorderBrush="#30FFFFFF" BorderThickness="1">
+                    <TextBlock Text="Khôi phục mặc định" FontSize="10.5" FontWeight="Medium"
+                               Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  </Border>
+                </Button>
+                <TextBlock Text="Điều khiển đã ẩn" FontSize="11.5" FontWeight="SemiBold" VerticalAlignment="Center"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </DockPanel>
+              <WrapPanel x:Name="HiddenControlsWrapPanel" Orientation="Horizontal" />
+            </StackPanel>
+          </Border>
+          <Grid x:Name="NightLightStrengthPanel" Width="280" Visibility="Collapsed">
+            <StackPanel>
+              <Border CornerRadius="22" Padding="14,12" Margin="4"
+                      Background="#18FFFFFF" BorderBrush="#20FFFFFF" BorderThickness="1">
+                <StackPanel>
+                  <DockPanel>
+                    <TextBlock Text="Cường độ" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                    <TextBlock x:Name="NightLightStrengthValueText" Text="Đang đọc…" FontSize="12" FontWeight="SemiBold"
+                               HorizontalAlignment="Right"
+                               Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                  </DockPanel>
+                  <Slider x:Name="NightLightStrengthSlider" Style="{StaticResource PanelSlider}" Value="50"
+                          IsEnabled="False" Margin="0,7,0,0" ToolTip="Cường độ Night light của Windows"
+                          ValueChanged="OnNightLightStrengthSliderValueChanged" />
+                </StackPanel>
+              </Border>
+              <TextBlock x:Name="NightLightStrengthStatusText" Text="Đang đồng bộ với Windows…" FontSize="11"
+                         Margin="12,2,12,4" Opacity="0.78"
+                         Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            </StackPanel>
+          </Grid>
+
+          <!-- Bottom Footer Bar with Power Button at the bottom-right corner -->
+          <Grid x:Name="QuickSettingsFooterPanel" Width="280" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="WindowsSettingsButton" Grid.Column="0" Style="{StaticResource PlainIconButton}"
+                    HorizontalAlignment="Left" Click="OnWindowsSettingsButtonClick"
+                    ToolTip="Mở Cài đặt Windows" AutomationProperties.Name="Cài đặt Windows">
+              <Border CornerRadius="18" Width="36" Height="36"
+                      Background="#18FFFFFF" BorderBrush="#24FFFFFF" BorderThickness="1">
+                <TextBlock Text="&#xE713;" FontFamily="{StaticResource PanelIconFont}" FontSize="16"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+            </Button>
+
+            <Button x:Name="PowerButton" Grid.Column="1" Style="{StaticResource PlainIconButton}"
+                    Click="OnPowerButtonClick"
+                    ToolTip="Tùy chọn nguồn" AutomationProperties.Name="Tùy chọn nguồn">
+              <Border x:Name="PowerButtonBubble" CornerRadius="18" Width="36" Height="36"
+                      Background="#18FFFFFF" BorderBrush="#24FFFFFF" BorderThickness="1">
+                <TextBlock Text="&#xE7E8;" FontFamily="{StaticResource PanelIconFont}" FontSize="16"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+            </Button>
+          </Grid>
+        </StackPanel>
+      </controls:PhoneBorder>
+    </Grid>
+  </Border>
+</controls:GlassWindow>

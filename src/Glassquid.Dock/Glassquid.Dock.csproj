@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Dock bar. Phase 1 ships the window shell only; the icon bar, magnification and pinning
+    arrive in phase 4. The AppServices reference is how the dock reaches the shared
+    application library (through AppServiceHost) — it must never reference Glassquid.App.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <RootNamespace>Glassquid.Dock</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Glassquid.AppServices\Glassquid.AppServices.csproj" />
+    <ProjectReference Include="..\Glassquid.Core\Glassquid.Core.csproj" />
+    <ProjectReference Include="..\Glassquid.UI\Glassquid.UI.csproj" />
+    <ProjectReference Include="..\..\third_party\ManagedShell\src\ManagedShell.WindowsTray\ManagedShell.WindowsTray.csproj" />
+    <PackageReference Include="System.Data.OleDb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Battery\*.svg" />
+    <EmbeddedResource Include="Assets\Alerts\*.svg" />
+    <EmbeddedResource Include="Assets\Bluetooth\*.svg" />
+    <EmbeddedResource Include="Assets\Airplane\*.svg" />
+    <EmbeddedResource Include="Assets\EnergySaver\*.svg" />
+    <EmbeddedResource Include="Assets\Keyboard\*.svg" />
+    <EmbeddedResource Include="Assets\Network\*.svg" />
+    <EmbeddedResource Include="Assets\FluentUI-System-Icons-LICENSE.txt" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,140 @@
+<controls:GlassWindow
+    x:Class="Glassquid.Dock.WifiFlyoutWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Glassquid.UI.Controls;assembly=Glassquid.UI"
+    Title="Wi-Fi"
+    AutomationProperties.Name="Mạng Wi-Fi"
+    ShowInTaskbar="False"
+    WindowStartupLocation="Manual"
+    SizeToContent="WidthAndHeight"
+    Topmost="True"
+    SnapsToDevicePixels="True"
+    Deactivated="OnPopupDeactivated"
+    PreviewKeyDown="OnPopupPreviewKeyDown">
+
+  <controls:GlassWindow.Resources>
+    <Style x:Key="PanelButton" TargetType="Button">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="ButtonSurface" Background="{TemplateBinding Background}" CornerRadius="12">
+              <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#20FFFFFF" /></Trigger>
+              <Trigger Property="IsPressed" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#38FFFFFF" /></Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.55" /></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource PanelButton}">
+      <Setter Property="Padding" Value="11,6" />
+      <Setter Property="MinHeight" Value="32" />
+      <Setter Property="Background" Value="#18FFFFFF" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="ButtonSurface" Background="{TemplateBinding Background}" BorderBrush="#28FFFFFF" BorderThickness="1" CornerRadius="10">
+              <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#30FFFFFF" /></Trigger>
+              <Trigger Property="IsPressed" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#48FFFFFF" /></Trigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.55" /></Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </controls:GlassWindow.Resources>
+
+  <Border Background="Transparent" SnapsToDevicePixels="True">
+    <Grid x:Name="PopupVisualRoot" Opacity="0" RenderTransformOrigin="0.5,0.5">
+      <Grid.RenderTransform><TranslateTransform x:Name="PopupSlideTransform" Y="12" /></Grid.RenderTransform>
+      <controls:LiquidGlassSurface x:Name="GlassSurface" />
+      <controls:PhoneBorder CornerRadius="{Binding PanelCornerRadius, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Padding="16,14"
+              Background="Transparent"
+              BorderBrush="{Binding PanelBorderBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+              BorderThickness="1.5">
+        <StackPanel Width="420">
+          <Grid Margin="2,0,2,10">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="38" /><ColumnDefinition Width="28" /><ColumnDefinition Width="*" /><ColumnDefinition Width="58" /></Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource PanelButton}" Width="32" Height="34" Click="OnBackClick" ToolTip="Đóng bảng Wi-Fi" AutomationProperties.Name="Quay lại">
+              <TextBlock Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Button>
+            <TextBlock Grid.Column="1" Text="&#xE701;" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalAlignment="Center" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <TextBlock Grid.Column="2" Text="Wi-Fi" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <Button x:Name="WifiPowerButton" Grid.Column="3" Width="52" Height="30" HorizontalAlignment="Right" Style="{StaticResource PanelButton}" Click="OnWifiPowerClick" ToolTip="Bật hoặc tắt Wi-Fi" AutomationProperties.Name="Bật hoặc tắt Wi-Fi">
+              <Border x:Name="WifiToggleTrack" Width="50" Height="26" CornerRadius="13" Background="#38FFFFFF">
+                <Ellipse x:Name="WifiToggleKnob" Width="20" Height="20" Margin="3" HorizontalAlignment="Left" Fill="White" />
+              </Border>
+            </Button>
+          </Grid>
+
+          <TextBlock x:Name="WifiStatusText" Text="Đang kiểm tra Wi-Fi…" Margin="12,0,12,12" FontSize="12" Opacity="0.78" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+
+          <Border x:Name="ConnectedNetworkCard" Visibility="Collapsed" Background="#18FFFFFF" BorderBrush="#28FFFFFF" BorderThickness="1" CornerRadius="18" Padding="12,10" Margin="0,0,0,8">
+            <Grid>
+              <Grid.ColumnDefinitions><ColumnDefinition Width="34" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+              <TextBlock Text="&#xE701;" FontFamily="Segoe MDL2 Assets" FontSize="20" VerticalAlignment="Top" Margin="1,1,0,0" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="4,0,8,0">
+                <TextBlock x:Name="ConnectedNetworkNameText" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                <TextBlock x:Name="ConnectedNetworkDetailsText" FontSize="11" Opacity="0.74" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </StackPanel>
+              <Button x:Name="DisconnectButton" Grid.Column="2" Style="{StaticResource ActionButton}" VerticalAlignment="Bottom" Click="OnDisconnectClick" ToolTip="Ngắt kết nối Wi-Fi">
+                <TextBlock Text="Ngắt kết nối" FontSize="11" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </Button>
+            </Grid>
+          </Border>
+
+          <Grid Margin="8,0,4,4">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <TextBlock Text="Mạng khả dụng" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <Button Grid.Column="1" Style="{StaticResource PanelButton}" Padding="8,4" Click="OnRefreshNetworksClick" AutomationProperties.Name="Quét lại mạng Wi-Fi" ToolTip="Quét lại mạng xung quanh">
+              <TextBlock x:Name="RefreshText" Text="Quét lại" FontSize="11" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            </Button>
+          </Grid>
+
+          <ScrollViewer Height="274" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl x:Name="AvailableNetworksList">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Background="#0FFFFFFF" CornerRadius="14" Padding="9,7" Margin="0,2">
+                    <Grid>
+                      <Grid.ColumnDefinitions><ColumnDefinition Width="34" /><ColumnDefinition Width="*" /><ColumnDefinition Width="82" /></Grid.ColumnDefinitions>
+                      <TextBlock Text="&#xE701;" FontFamily="Segoe MDL2 Assets" FontSize="19" VerticalAlignment="Center" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="3,0,6,0">
+                        <TextBlock Text="{Binding Name}" FontSize="13" TextTrimming="CharacterEllipsis" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                        <TextBlock FontSize="10" Opacity="0.72" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}">
+                          <Run Text="{Binding SignalQuality, Mode=OneWay}" /><Run Text="% tín hiệu · " /><Run Text="{Binding SecurityLabel, Mode=OneWay}" />
+                        </TextBlock>
+                      </StackPanel>
+                      <Button Grid.Column="2" Style="{StaticResource ActionButton}" VerticalAlignment="Center" Tag="{Binding}" Click="OnConnectClick" ToolTip="Kết nối với mạng này">
+                        <TextBlock Text="Kết nối" FontSize="10" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+                      </Button>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+          <TextBlock x:Name="NetworksEmptyText" Text="Đang tìm mạng Wi-Fi…" Margin="12,8,8,4" FontSize="12" TextWrapping="Wrap" Opacity="0.72" Visibility="Collapsed" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          <TextBlock x:Name="OperationStatusText" Visibility="Collapsed" Margin="10,5,10,2" FontSize="11" TextWrapping="Wrap" Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          <Border Height="1" Margin="0,7,0,3" Background="#28FFFFFF" />
+          <Button Style="{StaticResource PanelButton}" Height="38" Padding="10,0" HorizontalContentAlignment="Left" Click="OnMoreSettingsClick" AutomationProperties.Name="Cài đặt Wi-Fi khác">
+            <TextBlock Text="Cài đặt Wi-Fi khác" FontSize="12" Opacity="0.82" Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          </Button>
+        </StackPanel>
+      </controls:PhoneBorder>
+    </Grid>
+  </Border>
+</controls:GlassWindow>

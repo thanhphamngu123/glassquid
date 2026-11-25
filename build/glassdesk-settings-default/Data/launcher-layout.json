@@ -1,0 +1,34 @@
+{
+  "pages": [
+    {
+      "id": "page-1",
+      "slots": [
+        {
+          "kind": "App",
+          "itemId": "2bca8c2d46b442f3a3a8fc95a3941c80"
+        },
+        {
+          "kind": "App",
+          "itemId": "61e6a45c2bb647d0ae3c975d471a4a93"
+        },
+        {
+          "kind": "App",
+          "itemId": "7fde24f889d54a3ba9e61b032881aae0"
+        },
+        {
+          "kind": "App",
+          "itemId": "cf28635f95304d159e68755b5cdac5f3"
+        },
+        {
+          "kind": "App",
+          "itemId": "58f8ecca78e9487e96a45cc91c2fda84"
+        },
+        {
+          "kind": "App",
+          "itemId": "52ee104af3b94f3a899ec4da441eb26c"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 2
+}

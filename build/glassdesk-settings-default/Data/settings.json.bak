@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "appearance": {
+    "dockGlassTransparency": 0.9,
+    "launcherGlassTransparency": 0.2,
+    "dockBuiltinIconBrightness": 1,
+    "launchpadIconFilled": false,
+    "launcherTextBrightness": 1,
+    "glassBackgroundClarity": 0.5,
+    "glassTintOpacity": 0.16,
+    "glassMaterial": "FrostedGlass",
+    "theme": "Dark",
+    "accentColor": "#0A84FF",
+    "useSystemBackdrop": true,
+    "reduceMotion": false,
+    "reduceTransparency": false,
+    "dockCornerRadius": 40,
+    "launcherCornerRadius": 80
+  },
+  "dock": {
+    "sizeScale": 1.0076425631981192,
+    "showLauncherEntry": true,
+    "showThisPcEntry": true,
+    "showDesktopIconsEntry": true,
+    "frameLengthDip": 0,
+    "iconSize": 36,
+    "iconSpacing": 10,
+    "magnificationPeak": 1.15,
+    "placement": "BottomCenter",
+    "offsetX": 2,
+    "offsetY": 0,
+    "autoHide": false,
+    "autoHideLeaveDelayMs": 300,
+    "edgeRevealEnabled": false,
+    "edgeHotzoneSize": 14,
+    "blockRevealWhenCovered": true,
+    "showRunningIndicator": true
+  },
+  "launcher": {
+    "rows": 5,
+    "columns": 7,
+    "windowWorkAreaRatio": 0.66,
+    "fullscreenMode": false,
+    "focusSearchOnOpen": true,
+    "rememberLastPage": true
+  },
+  "shortcuts": {
+    "mouseBackAction": "ToggleLauncher",
+    "mouseForwardAction": "None",
+    "toggleLauncher": {
+      "enabled": false,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "",
+      "isBound": false
+    },
+    "hideLauncher": {
+      "enabled": false,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "",
+      "isBound": false
+    },
+    "nextPage": {
+      "enabled": true,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "WheelDown",
+      "isBound": true
+    },
+    "previousPage": {
+      "enabled": true,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "WheelUp",
+      "isBound": true
+    },
+    "toggleDesktopIcons": {
+      "enabled": false,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "",
+      "isBound": false
+    },
+    "toggleDockRevealLock": {
+      "enabled": false,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "",
+      "isBound": false
+    },
+    "hotCornersEnabled": false,
+    "hotCornerTarget": "None",
+    "hotCornerDwellMs": 300,
+    "mouseSideButtonsEnabled": false,
+    "mouseBackButton": {
+      "enabled": false,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "",
+      "isBound": false
+    },
+    "mouseForwardButton": {
+      "enabled": false,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "",
+      "isBound": false
+    }
+  },
+  "display": {
+    "launcherFollowsPointer": true,
+    "suppressTriggersWhenFullscreen": true
+  },
+  "performance": {
+    "autoSuspendWhenFullscreen": false
+  },
+  "desktopTaskbar": {
+    "toggleDesktopIcons": {
+      "enabled": false,
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "win": false,
+      "key": "",
+      "isBound": false
+    },
+    "hideWindowsTaskbar": true,
+    "blockTaskbarEdgeReveal": false,
+    "taskbarAutoHideEnabled": false
+  }
+}

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Trình điều khiển kiểm thử desktop độc lập cho giai đoạn 4.
+
+    Phân công với tests/Glassquid.UiAcceptance nằm ở cách điều khiển, không phải phạm vi bao phủ:
+    bên kia chạy các sự kiện định tuyến WPF trong cùng tiến trình, bên này dùng Windows UI Automation để định vị điều khiển thật,
+    dùng SendInput để bơm thao tác chuột và bàn phím thật, nhờ vậy có thể bao phủ hộp thoại con gốc và thao tác kéo thả xuyên tiến trình —
+    hai loại mà sự kiện định tuyến không chạm tới được.
+
+    Nó cố ý không tham chiếu bất kỳ dự án Glassquid.* nào. Trình điều khiển hộp đen chỉ quan sát cửa sổ, điều khiển và tệp dữ liệu:
+    một khi tham chiếu mã sản phẩm, "sản phẩm đổi thì kiểm thử đổi theo" sẽ che giấu luôn cả lỗi bên trong.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <!-- UIAutomationClient / UIAutomationTypes và PngBitmapEncoder đều đi kèm với
+         framework WindowsDesktop, không cần gói bổ sung. -->
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>false</UseWindowsForms>
+    <RootNamespace>Glassquid.DesktopAcceptance</RootNamespace>
+    <!-- Khai báo PerMonitorV2: hình chữ nhật điều khiển của UIA và tọa độ của SendInput bắt buộc phải dùng cùng một không gian tọa độ. -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+</Project>

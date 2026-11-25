@@ -1,0 +1,193 @@
+<controls:GlassWindow
+    x:Class="Glassquid.Dock.PowerDialogWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Glassquid.UI.Controls;assembly=Glassquid.UI"
+    Title="Tùy chọn nguồn"
+    AutomationProperties.Name="Tùy chọn nguồn Glassquid"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="Manual"
+    Topmost="True"
+    SnapsToDevicePixels="True"
+    Deactivated="OnWindowDeactivated"
+    PreviewKeyDown="OnWindowPreviewKeyDown">
+
+  <controls:GlassWindow.Resources>
+    <FontFamily x:Key="PanelIconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+
+    <!-- Dock Style Action Button -->
+    <Style x:Key="PowerActionButtonStyle" TargetType="Button">
+      <Setter Property="Width" Value="78" />
+      <Setter Property="Height" Value="92" />
+      <Setter Property="Margin" Value="6,0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </controls:GlassWindow.Resources>
+
+  <Border Background="Transparent" BorderThickness="0" SnapsToDevicePixels="True">
+    <Grid x:Name="PopupVisualRoot" Opacity="0" RenderTransformOrigin="0.5,0.5">
+      <Grid.RenderTransform>
+        <TransformGroup>
+          <ScaleTransform x:Name="PopupScaleTransform" ScaleX="0.94" ScaleY="0.94" />
+          <TranslateTransform x:Name="PopupSlideTransform" Y="12" />
+        </TransformGroup>
+      </Grid.RenderTransform>
+
+      <!-- Glass Surface with live blur -->
+      <controls:LiquidGlassSurface x:Name="GlassSurface" />
+
+      <!-- Squircle Container matching the Dock styling -->
+      <controls:PhoneBorder CornerRadius="{Binding PanelCornerRadius, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" Padding="28,22" Background="Transparent"
+              BorderBrush="{Binding PanelBorderBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+              BorderThickness="1.5">
+        <StackPanel HorizontalAlignment="Center">
+
+          <!-- Header Title & Subtitle -->
+          <StackPanel HorizontalAlignment="Center" Margin="0,0,0,18">
+            <TextBlock Text="Tùy chọn nguồn" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"
+                       Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            <TextBlock Text="Chọn một tác vụ nguồn cho máy tính của bạn" FontSize="12" Opacity="0.72" HorizontalAlignment="Center" Margin="0,3,0,0"
+                       Foreground="{Binding SecondaryForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+          </StackPanel>
+
+          <!-- Horizontal Dock Row -->
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="4,0,4,16">
+
+            <!-- Lock -->
+            <Button x:Name="LockBtn" Style="{StaticResource PowerActionButtonStyle}"
+                    ToolTip="Khóa màn hình (Win + L)" AutomationProperties.Name="Khóa màn hình"
+                    MouseEnter="OnTileMouseEnter" MouseLeave="OnTileMouseLeave"
+                    Click="OnLockClick">
+              <StackPanel HorizontalAlignment="Center">
+                <controls:PhoneBorder x:Name="LockTile" Width="56" Height="56" CornerRadius="28"
+                                      Background="#18FFFFFF" BorderBrush="#25FFFFFF" BorderThickness="1"
+                                      RenderTransformOrigin="0.5,0.5">
+                  <controls:PhoneBorder.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                  </controls:PhoneBorder.RenderTransform>
+                  <TextBlock Text="&#xE72E;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </controls:PhoneBorder>
+                <TextBlock Text="Khóa" FontSize="12" FontWeight="Medium" Margin="0,8,0,0" HorizontalAlignment="Center"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </StackPanel>
+            </Button>
+
+            <!-- Sleep -->
+            <Button x:Name="SleepBtn" Style="{StaticResource PowerActionButtonStyle}"
+                    ToolTip="Chế độ ngủ (Sleep)" AutomationProperties.Name="Ngủ"
+                    MouseEnter="OnTileMouseEnter" MouseLeave="OnTileMouseLeave"
+                    Click="OnSleepClick">
+              <StackPanel HorizontalAlignment="Center">
+                <controls:PhoneBorder x:Name="SleepTile" Width="56" Height="56" CornerRadius="28"
+                                      Background="#18FFFFFF" BorderBrush="#25FFFFFF" BorderThickness="1"
+                                      RenderTransformOrigin="0.5,0.5">
+                  <controls:PhoneBorder.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                  </controls:PhoneBorder.RenderTransform>
+                  <TextBlock Text="&#xE708;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </controls:PhoneBorder>
+                <TextBlock Text="Ngủ" FontSize="12" FontWeight="Medium" Margin="0,8,0,0" HorizontalAlignment="Center"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </StackPanel>
+            </Button>
+
+            <!-- Restart -->
+            <Button x:Name="RestartBtn" Style="{StaticResource PowerActionButtonStyle}"
+                    ToolTip="Khởi động lại máy tính" AutomationProperties.Name="Khởi động lại"
+                    MouseEnter="OnTileMouseEnter" MouseLeave="OnTileMouseLeave"
+                    Click="OnRestartClick">
+              <StackPanel HorizontalAlignment="Center">
+                <controls:PhoneBorder x:Name="RestartTile" Width="56" Height="56" CornerRadius="28"
+                                      Background="#18FFFFFF" BorderBrush="#25FFFFFF" BorderThickness="1"
+                                      RenderTransformOrigin="0.5,0.5">
+                  <controls:PhoneBorder.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                  </controls:PhoneBorder.RenderTransform>
+                  <TextBlock Text="&#xE777;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </controls:PhoneBorder>
+                <TextBlock Text="Khởi động" FontSize="12" FontWeight="Medium" Margin="0,8,0,0" HorizontalAlignment="Center"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </StackPanel>
+            </Button>
+
+            <!-- Shut Down -->
+            <Button x:Name="ShutDownBtn" Style="{StaticResource PowerActionButtonStyle}"
+                    ToolTip="Tắt máy tính hoàn toàn" AutomationProperties.Name="Tắt máy"
+                    MouseEnter="OnTileMouseEnter" MouseLeave="OnTileMouseLeave"
+                    Click="OnShutDownClick">
+              <StackPanel HorizontalAlignment="Center">
+                <controls:PhoneBorder x:Name="ShutDownTile" Width="56" Height="56" CornerRadius="28"
+                                      Background="#24FF4D4D" BorderBrush="#35FF4D4D" BorderThickness="1"
+                                      RenderTransformOrigin="0.5,0.5">
+                  <controls:PhoneBorder.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                  </controls:PhoneBorder.RenderTransform>
+                  <TextBlock Text="&#xE7E8;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="#FF6B6B"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </controls:PhoneBorder>
+                <TextBlock Text="Tắt máy" FontSize="12" FontWeight="Medium" Margin="0,8,0,0" HorizontalAlignment="Center"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </StackPanel>
+            </Button>
+
+            <!-- Sign Out -->
+            <Button x:Name="SignOutBtn" Style="{StaticResource PowerActionButtonStyle}"
+                    ToolTip="Đăng xuất tài khoản người dùng" AutomationProperties.Name="Đăng xuất"
+                    MouseEnter="OnTileMouseEnter" MouseLeave="OnTileMouseLeave"
+                    Click="OnSignOutClick">
+              <StackPanel HorizontalAlignment="Center">
+                <controls:PhoneBorder x:Name="SignOutTile" Width="56" Height="56" CornerRadius="28"
+                                      Background="#18FFFFFF" BorderBrush="#25FFFFFF" BorderThickness="1"
+                                      RenderTransformOrigin="0.5,0.5">
+                  <controls:PhoneBorder.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                  </controls:PhoneBorder.RenderTransform>
+                  <TextBlock Text="&#xE7E7;" FontFamily="{StaticResource PanelIconFont}" FontSize="22"
+                             Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </controls:PhoneBorder>
+                <TextBlock Text="Đăng xuất" FontSize="12" FontWeight="Medium" Margin="0,8,0,0" HorizontalAlignment="Center"
+                           Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+              </StackPanel>
+            </Button>
+
+          </StackPanel>
+
+          <!-- Cancel / Close Hint Button -->
+          <Button x:Name="CancelButton" Width="100" Height="34" Margin="0,2,0,0"
+                  Style="{StaticResource PowerActionButtonStyle}"
+                  HorizontalAlignment="Center" Click="OnCancelClick"
+                  ToolTip="Đóng (Esc)" AutomationProperties.Name="Hủy bỏ">
+            <controls:PhoneBorder CornerRadius="17" Padding="14,6"
+                                  Background="#14FFFFFF" BorderBrush="#20FFFFFF" BorderThickness="1">
+              <TextBlock Text="Hủy bỏ" FontSize="12" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center"
+                         Foreground="{Binding ForegroundBrush, RelativeSource={RelativeSource AncestorType=controls:GlassWindow}}" />
+            </controls:PhoneBorder>
+          </Button>
+
+        </StackPanel>
+      </controls:PhoneBorder>
+    </Grid>
+  </Border>
+</controls:GlassWindow>
